@@ -18,7 +18,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.Holder> {
 
     //Variables for Contacts
-    private ArrayList<Data> list = new ArrayList<>();
+    private ArrayList<Contact_Data> list = new ArrayList<>();
 
     public interface OnItemClickListener{
         void onItemClick(View v, int position, int request_code);
@@ -45,7 +45,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             //            @Override
             public void onClick(View view) {
                 Toast.makeText(view.getContext(), "Call on Dial", Toast.LENGTH_SHORT).show();
-                Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("tel:" + list.get(position).getUser_phNumber()));
+                Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("tel:" + list.get(position).getPhone_number()));
                 view.getContext().startActivity(i);
             }
         });
@@ -71,8 +71,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         });
     }
 
-    void addItem(Data data) {
-        list.add(data);
+    void addItem(Contact_Data contactData) {
+        list.add(contactData);
     }
 
     void deleteItem(int position) {
@@ -101,10 +101,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             delete = itemView.findViewById(R.id.delete);
         }
 
-        void onBind(Data data) {
-            name.setText(data.getUser_Name());
-            number.setText(data.getUser_phNumber());
-            image.setImageBitmap(data.getPhoto());
+        void onBind(Contact_Data contactData) {
+            name.setText(contactData.getContact_name());
+            number.setText(contactData.getPhone_number());
+            image.setImageBitmap(contactData.getPhoto());
         }
     }
 }

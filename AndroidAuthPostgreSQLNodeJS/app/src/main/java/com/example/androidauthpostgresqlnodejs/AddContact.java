@@ -1,5 +1,6 @@
 package com.example.androidauthpostgresqlnodejs;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -13,6 +14,9 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.androidauthpostgresqlnodejs.Retrofit.RetroCallback;
+import com.example.androidauthpostgresqlnodejs.Retrofit.RetrofitClient;
+
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 
@@ -21,6 +25,7 @@ public class AddContact extends AppCompatActivity implements View.OnClickListene
     final int ADD_CONTACT_PHOTO=4;
     private Intent contact = new Intent();
     String user_Email;
+//    RetrofitClient retrofitClient;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -29,6 +34,10 @@ public class AddContact extends AppCompatActivity implements View.OnClickListene
         Button addphoto = (Button) findViewById(R.id.addedphoto);
         final EditText addname = (EditText) findViewById(R.id.addedname);
         final EditText addnumber = (EditText) findViewById(R.id.addednumber);
+
+        //Initialize Service
+        final RetrofitClient retrofitClient;
+        retrofitClient = RetrofitClient.getInstance(this).createBaseApi();
 
         user_Email = getIntent().getExtras().getString("current_user_email");
 
@@ -50,7 +59,7 @@ public class AddContact extends AppCompatActivity implements View.OnClickListene
             @Override
             public void onClick(View v){
                 String addedname;
-                String addednumber;
+                final String addednumber;
                 addname.setInputType ( InputType. TYPE_TEXT_FLAG_NO_SUGGESTIONS );
                 addnumber.setInputType ( InputType. TYPE_TEXT_FLAG_NO_SUGGESTIONS );
                 addedname = addname.getText().toString();
@@ -58,6 +67,39 @@ public class AddContact extends AppCompatActivity implements View.OnClickListene
                 contact.putExtra("str_name", addedname);
                 contact.putExtra("str_number", addednumber);
                 setResult(RESULT_OK, contact);
+                
+                retrofitClient.addContact(addednumber, addedname,new RetroCallback() {
+                    @Override
+                    public void onError(Throwable t) {
+                        Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onSuccess(int code, Object receivedData) {
+                        Toast.makeText(getApplicationContext(), "New contact added!", Toast.LENGTH_SHORT).show();
+
+                        retrofitClient.updateUserContacts(user_Email, addednumber, new RetroCallback() {
+                            @Override
+                            public void onError(Throwable t) {
+                                Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+
+                            @Override
+                            public void onSuccess(int code, Object receivedData) {
+                            }
+
+                            @Override
+                            public void onFailure(int code) {
+                                Toast.makeText(getApplicationContext(), "Code: " + code, Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                    @Override
+                    public void onFailure(int code) {
+                        Toast.makeText(getApplicationContext(), "Code: " + code, Toast.LENGTH_SHORT).show();
+                    }
+                });
+
                 finish();
             }
         });

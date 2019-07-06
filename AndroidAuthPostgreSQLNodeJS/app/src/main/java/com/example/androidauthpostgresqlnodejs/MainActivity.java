@@ -21,6 +21,11 @@ import com.example.androidauthpostgresqlnodejs.Retrofit.RetrofitClient;
 import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
+import org.json.JSONArray;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import io.reactivex.disposables.CompositeDisposable;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -34,6 +39,8 @@ public class MainActivity extends AppCompatActivity {
     Button btn_login;
 
     String user_Email;
+    public static List<Contact_Data> contactList;
+    public static User login_user;
 
 //    CompositeDisposable compositeDisposable = new CompositeDisposable();
 //    @Override
@@ -57,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
 
         btn_login = (Button) findViewById(R.id.btn_login);
         btn_login.setOnClickListener(new View.OnClickListener(){
+
             @Override
             public void onClick(View view) {
 
@@ -70,9 +78,10 @@ public class MainActivity extends AppCompatActivity {
                     return;
                 }
 
+                login_user = new User(edt_login_email.getText().toString(), "", edt_login_password.getText().toString());
+
                 // login with user and check if username and password match/exist
-                retrofitClient.loginUser(edt_login_email.getText().toString(),
-                    edt_login_password.getText().toString(), new RetroCallback() {
+                retrofitClient.loginUser(login_user, new RetroCallback() {
                         @Override
                         public void onError(Throwable t) {
                             Toast.makeText(MainActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
@@ -82,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
 
                             Toast.makeText(MainActivity.this, "Login successful." , Toast.LENGTH_SHORT).show();
 
-                            retrofitClient.loadContacts(edt_login_email.getText().toString(), new RetroCallback() {
+                            retrofitClient.loadContacts(login_user.getEmail(), new RetroCallback() {
                                 @Override
                                 public void onError(Throwable t) {
                                     Toast.makeText(MainActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
@@ -90,12 +99,12 @@ public class MainActivity extends AppCompatActivity {
 
                                 @Override
                                 public void onSuccess(int code, Object receivedData) {
-                                    // received Data connect with Intent
+                                    // received Contact_Data connect with Intent
                                     Intent intent = new Intent(MainActivity.this, TabActivity.class);
-                                    user_Email = edt_login_email.getText().toString();
+                                    contactList = (List<Contact_Data>) receivedData;
+                                    user_Email = login_user.getEmail();
 //                                    intent.putExtra("user_Email", edt_login_email.getText().toString());
                                     startActivity(intent);                  //Open tabbed activity
-
                                 }
 
                                 @Override
@@ -141,6 +150,8 @@ public class MainActivity extends AppCompatActivity {
                                 MaterialEditText edt_register_name = (MaterialEditText) register_layout.findViewById(R.id.edt_name);
                                 MaterialEditText edt_register_password = (MaterialEditText) register_layout.findViewById(R.id.edt_password);
 
+                                User new_user = new User(edt_register_email.getText().toString(), edt_register_name.getText().toString(), edt_register_password.getText().toString());
+
                                 if (TextUtils.isEmpty(edt_register_email.getText().toString())) {
                                     Toast.makeText(MainActivity.this, "Email cannot be empty. Please enter email", Toast.LENGTH_SHORT).show();
                                     return;
@@ -156,16 +167,16 @@ public class MainActivity extends AppCompatActivity {
                                     return;
                                 }
 
-                                retrofitClient.registerUser(edt_register_email.getText().toString(),
-                                        edt_register_name.getText().toString(),
-                                        edt_register_password.getText().toString(), new RetroCallback() {
+                                retrofitClient.registerUser(new_user, new RetroCallback() {
                                             @Override
                                             public void onError(Throwable t) {
-                                                Toast.makeText(MainActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+                                                System.out.println(t.getMessage());
+                                                Toast.makeText(MainActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
                                             }
 
                                             @Override
                                             public void onSuccess(int code, Object receivedData) {
+
                                                 Toast.makeText(MainActivity.this, receivedData.toString() , Toast.LENGTH_SHORT).show();
                                             }
 
@@ -180,8 +191,12 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public String getUser_Email() {
-        return user_Email;
-    }
+//    public String getUser_Email() {
+//        return user_Email;
+//    }
+//
+//    public ArrayList<Contact_Data> getContactList() {
+//        return contactList;
+//    }
 
 }
