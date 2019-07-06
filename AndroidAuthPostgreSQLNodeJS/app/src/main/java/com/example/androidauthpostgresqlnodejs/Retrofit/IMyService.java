@@ -19,16 +19,16 @@ public interface IMyService {
 
     final String Base_URL = "http://http://143.248.38.250:3000";
 
-//    @POST("register")
-//    @FormUrlEncoded
-//    Observable<String> registerUser(@Field("email") String email,
-//                                    @Field("name") String name,
-//                                    @Field("password") String password);
+    @POST("register")
+    @FormUrlEncoded
+    Observable<String> registerUser(@Field("email") String email,
+                                    @Field("name") String name,
+                                    @Field("password") String password);
 //
-//    @POST("login")
-//    @FormUrlEncoded
-//    Observable<String> loginUser(@Field("email") String email,
-//                                    @Field("password") String password);
+    @POST("login")
+    @FormUrlEncoded
+    Observable<String> loginUser(@Field("email") String email,
+                                    @Field("password") String password);
 
     @GET("/posts/{userId}")
     Call<ResponseGet> getFirst(@Path("userId") String id);
