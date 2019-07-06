@@ -63,11 +63,11 @@ const createUser = (req, res) => {
 }
 
 // POST existing user
-const loginUser = (req, res) => {
-	const { name, }
+// const loginUser = (req, res) => {
+// 	const { name }
 
-	pool.query('SELECT password FROM users WHERE ')
-}
+// 	pool.query('SELECT password FROM users WHERE ')
+// }
 
 
 //PUT updated data in an existing user

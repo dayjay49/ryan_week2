@@ -1,8 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#A3D6EB</color>
+    <color name="colorPrimary">#9DD6F8</color>
+    <color name="colorPrimaryDark">#83C5EE</color>
+    <color name="colorAccent">#FFC107</color>
     <color name="myTextColor">#AFAFAF</color>
     <color name="myDarkerGray">#525151</color>
+    <color name="colorButton1">#555556</color>
+    <color name="colortext1">#BFA98B</color>
+    <color name="pokerBackground">#4A833F</color>
+    <color name="brightGray">#FFFFFF</color>
+    <color name="avobg">#99C9C3</color>
+    <color name="avotext">#845716</color>
+    <color name="colortext2">#ECE6DB</color>
+
 </resources>

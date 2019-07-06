@@ -1,85 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:weightSum="4"
+    android:id="@+id/placeholder"
     tools:context=".MainActivity">
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_weight="2"
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp">
-        
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
 
-            <ImageView
-                android:src="@drawable/ryan_login_background"
-                android:scaleType="fitXY"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
 
-            <TextView
-                android:id="@+id/txt_create_account"
-                android:text="+ CREATE ACCOUNT"
-                android:textStyle="bold"
-                android:textColor="@color/myDarkerGray"
-                android:layout_margin="16dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-        </FrameLayout>
-        
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="vertical"
-        android:background="@android:color/white"
-        android:layout_margin="16dp"
-        android:padding="16dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <com.rengwuxian.materialedittext.MaterialEditText
-            android:id="@+id/edt_email"
-            android:hint="Email"
-            android:inputType="textEmailAddress"
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:met_textColorHint="@color/myTextColor"
-            app:met_baseColor="@color/myTextColor"
-            app:met_primaryColor="@color/myTextColor"
-            app:met_iconPadding="0dp"
-            app:met_iconRight="@drawable/ic_email"/>
+            android:background="?attr/colorPrimary" />
+    </com.google.android.material.appbar.AppBarLayout>
 
-        <com.rengwuxian.materialedittext.MaterialEditText
-            android:id="@+id/edt_password"
-            android:hint="Password"
-            android:inputType="textPassword"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:met_textColorHint="@color/myTextColor"
-            app:met_baseColor="@color/myTextColor"
-            app:met_primaryColor="@color/myTextColor"
-            app:met_iconPadding="0dp"
-            app:met_iconRight="@drawable/ic_lock"/>
-
-    </LinearLayout>
-
-    <Button
-        android:id="@+id/btn_login"
-        android:layout_margin="16dp"
-        android:background="@color/colorAccent"
-        android:text="LOGIN"
-        android:textSize="20sp"
-        android:textColor="@color/myDarkerGray"
-        style="@style/Widget.AppCompat.Button.Borderless.Colored"
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/view_pager"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-</LinearLayout>
+    <!--<com.google.android.material.floatingactionbutton.FloatingActionButton-->
+    <!--android:id="@+id/fab"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_gravity="bottom|end"-->
+    <!--android:layout_margin="@dimen/fab_margin"-->
+    <!--app:srcCompat="@android:drawable/ic_dialog_email" />-->
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
