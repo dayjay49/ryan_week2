@@ -20,11 +20,14 @@ app.get('/', function(req, res) {
 
 
 app.get('/users', db.getUsers)
-app.get('/users/:id', db.getUserById)
-app.post('/users', db.createUser)
-app.put('/users/:id', db.updateUser)
-app.delete('/users/:id', db.deleteUser)
+app.get('/users/:email', db.getUserByEmail)
+app.post('/users', db.registerUser)
+app.put('/users/:email', db.updateUser)
+app.delete('/users/:email', db.deleteUser)
 
+app.get('/contacts/:email', db.getContactsByUser)
+app.post('/contacts', db.addContact)
+app.delete('/contacts/:phone_number', db.deleteContact)
 
 // Server
 app.listen(port, () => {
