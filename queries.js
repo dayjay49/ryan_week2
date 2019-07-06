@@ -42,7 +42,7 @@ const registerUser = (req, res) => {
     if (error) {
       throw error
     }
-    res.status(201).send(`User added with email: ${results.insertId}`) //${results.insertId}`
+    res.status(201).send(`New user registered with email: ${email}`) //${results.insertId}`
   })
 }
 
@@ -116,6 +116,26 @@ const deleteContact = (req, res) => {
     res.status(200).send(`User deleted with phone number: ${phone_number}`)
   })
 }
+// -------------------------------CONTACT QUERIES-------------------------------------
+
+
+// POST login user and load all contacts of the user logged in
+const loginUser = (req, res) => {
+  const { email, password } = req.body
+
+  pool.query('SELECT email FROM users WHERE email = $1 AND password = $2' , [email, password], (error, results) => {
+    if (error) {
+      throw error
+    }
+    else if (results.length == 0) {
+      res.status(400).send(`Wrong email and/or password. Please enter valid email and password.`)
+    }
+    else{
+      res.status(200).json(results.rows)
+    }
+  })
+}
+
 
 module.exports = {
 	getUsers,
