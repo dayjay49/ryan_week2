@@ -54,46 +54,47 @@ public class RetrofitClient {
         }
         return retrofit.create(service);
     }
-
+    // POST
     public void registerUser(String email, String name, String password, final RetroCallback callback) {
         User user = new User(email, name, password);
-        Call<Object> call = apiService.registerUser(user);
-        call.enqueue(new Callback<Object>() {
+        Call<String> call = apiService.registerUser(user);
+        call.enqueue(new Callback<String>() {
             @Override
-            public void onResponse(Call<Object> call, Response<Object> response) {
+            public void onResponse(Call<String> call, Response<String> response) {
                 if (!response.isSuccessful()) {
                     callback.onFailure(response.code());
                 } else {
                     callback.onSuccess(response.code(), response.body());
                 }
             }
+
             @Override
-            public void onFailure(Call<Object> call, Throwable t) {
+            public void onFailure(Call<String> call, Throwable t) {
                 callback.onError(t);
             }
         });
     }
-
+    // POST
     public void loginUser(String email, String password, final RetroCallback callback) {
-        Call<Object> call = apiService.loginUser(email, password);
-        call.enqueue(new Callback<Object>() {
+        Call<User> call = apiService.loginUser(email, password);
+        call.enqueue(new Callback<User>() {
             @Override
-            public void onResponse(Call<Object> call, Response<Object> response) {
+            public void onResponse(Call<User> call, Response<User> response) {
                 if (!response.isSuccessful()) {
                     callback.onFailure(response.code());
                 } else {
                     callback.onSuccess(response.code(), response.body());
                 }
             }
+
             @Override
-            public void onFailure(Call<Object> call, Throwable t) {
+            public void onFailure(Call<User> call, Throwable t) {
                 callback.onError(t);
             }
         });
     }
-
+    // GET
     public void loadContacts(String email, final RetroCallback callback) {
-
         apiService.loadContacts(email).enqueue(new Callback<List<Contact>>() {
             @Override
             public void onResponse(Call<List<Contact>> call, Response<List<Contact>> response) {
@@ -103,7 +104,6 @@ public class RetrofitClient {
                     callback.onSuccess(response.code(), response.body());
                 }
             }
-
             @Override
             public void onFailure(Call<List<Contact>> call, Throwable t) {
                 callback.onError(t);
@@ -111,15 +111,40 @@ public class RetrofitClient {
         });
     }
 
+    public void addContact(String email, String phone_number, String contact_name, final RetroCallback callback) {
+        Call<String> call = apiService.addContact(email, phone_number, contact_name);
+        call.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                if (!response.isSuccessful()) {
+                    callback.onFailure(response.code());
+                } else {
+                    callback.onSuccess(response.code(), response.body());
+                }
+            }
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                callback.onError(t);
+            }
+        });
+    }
 
-  /*  public static Retrofit getInstance() {
-        if (instance == null)
-            instance = new Retrofit.Builder()
-                    .baseUrl("http://143.248.38.250:3000/")
-                    .addConverterFactory(ScalarsConverterFactory.create())
-                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                    .build();
-            return instance;
+    public void deleteContact(String phone_number, final RetroCallback callback) {
+        apiService.deleteContact(phone_number).enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                if (!response.isSuccessful()) {
+                    callback.onFailure(response.code());
+                } else {
+                    callback.onSuccess(response.code(), response.body());
+                }
+            }
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                callback.onError(t);
+            }
+        });
+    }
 
-    }*/
 }
+

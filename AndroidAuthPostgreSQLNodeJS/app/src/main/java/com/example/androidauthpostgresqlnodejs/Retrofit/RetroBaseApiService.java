@@ -7,6 +7,7 @@ import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -15,21 +16,26 @@ import retrofit2.http.Path;
 
 public interface RetroBaseApiService {
 
-    @GET("/users/{userEmail}")
-    Call<User> getUserByEmail(@Path("userEmail") String email);
-
+   // request User, response String
     @POST("register")
-    Call<Object> registerUser(@Body Object user);
-    /*Call<User> registerUser(@Field("email") String email,
-                                    @Field("name") String name,
-                                    @Field("password") String password);*/
+    Call<String> registerUser(@Body User user);
 
+    // request Strings, response User
     @POST("login")
     @FormUrlEncoded
-    Call<Object> loginUser(@Field("email") String email,
+    Call<User> loginUser(@Field("email") String email,
                            @Field("password") String password);
 
-    @GET("contacts")
+    @GET("contacts/{email}")
     Call<List<Contact>> loadContacts(@Path("contacts") String email);
+
+    @POST("contacts")
+    @FormUrlEncoded
+    Call<String> addContact(@Field("email") String email,
+                            @Field("phone_number") String phone_number,
+                            @Field("contact_name") String contact_name);
+
+    @DELETE("contacts/{phone_number}")
+    Call<String> deleteContact(@Path("phone_number") String phone_number);
 
 }

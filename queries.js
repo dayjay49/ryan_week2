@@ -33,19 +33,6 @@ const getUserByEmail = (req, res) => {
   })
 }
 
-//POST a new user
-const registerUser = (req, res) => {
-  const { email, name, password } = req.body
-
-  pool.query('INSERT INTO users (email, name, password) VALUES ($1, $2, $3)', 
-  	[email, name, password], (error, results) => {
-    if (error) {
-      throw error
-    }
-    res.status(201).send(`New user registered with email: ${email}`) //${results.insertId}`
-  })
-}
-
 //PUT updated data in an existing user
 const updateUser = (req, res) => {
   const { email, name, password } = req.body
@@ -79,9 +66,39 @@ const deleteUser = (req, res) => {
 
 // -------------------------------CONTACT QUERIES-------------------------------------
 
+//POST a new user
+const registerUser = (req, res) => {
+  const { email, name, password } = req.body
+
+  pool.query('INSERT INTO users (email, name, password) VALUES ($1, $2, $3)', 
+    [email, name, password], (error, results) => {
+    if (error) {
+      throw error
+    }
+    res.status(201).send(`New user registered with email: ${email}`) //${results.insertId}`
+  })
+}
+
+// POST login user and load all contacts of the user logged in
+const loginUser = (req, res) => {
+  const { email, password } = req.body
+
+  pool.query('SELECT email FROM users WHERE email = $1 AND password = $2' , [email, password], (error, results) => {
+    if (error) {
+      throw error
+    }
+    else if (results.length == 0) {
+      res.status(400).send(`Wrong email and/or password. Please enter valid email and password.`)
+    }
+    else{
+      res.status(200).json(results.rows)
+    }
+  })
+}
+
 // GET all contacts for a given user after login verified
 const getContactsByUser = (req, res) => {
-	const email = req.params.email
+  const email = req.params.email
 
   pool.query('SELECT * FROM contacts INNER JOIN users ON contacts.phone_number = users_contacts.contact_number AND users_contacts.user_email = $1',
    [email] , (error, results) => {
@@ -116,26 +133,6 @@ const deleteContact = (req, res) => {
     res.status(200).send(`User deleted with phone number: ${phone_number}`)
   })
 }
-// -------------------------------CONTACT QUERIES-------------------------------------
-
-
-// POST login user and load all contacts of the user logged in
-const loginUser = (req, res) => {
-  const { email, password } = req.body
-
-  pool.query('SELECT email FROM users WHERE email = $1 AND password = $2' , [email, password], (error, results) => {
-    if (error) {
-      throw error
-    }
-    else if (results.length == 0) {
-      res.status(400).send(`Wrong email and/or password. Please enter valid email and password.`)
-    }
-    else{
-      res.status(200).json(results.rows)
-    }
-  })
-}
-
 
 module.exports = {
 	getUsers,

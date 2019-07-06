@@ -33,14 +33,12 @@ public class MainActivity extends AppCompatActivity {
     MaterialEditText edt_login_email, edt_login_password;
     Button btn_login;
 
-    CompositeDisposable compositeDisposable = new CompositeDisposable();
-    RetroBaseApiService retroBaseApiService;
-
-    @Override
-    protected void onStop() {
-        compositeDisposable.clear();
-        super.onStop();
-    }
+//    CompositeDisposable compositeDisposable = new CompositeDisposable();
+//    @Override
+//    protected void onStop() {
+//        compositeDisposable.clear();
+//        super.onStop();
+//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,23 +68,43 @@ public class MainActivity extends AppCompatActivity {
                     return;
                 }
 
+                // login with user and check if username and password match/exist
                 retrofitClient.loginUser(edt_login_email.getText().toString(),
-                        edt_login_password.getText().toString(), new RetroCallback() {
-                            @Override
-                            public void onError(Throwable t) {
+                    edt_login_password.getText().toString(), new RetroCallback() {
+                        @Override
+                        public void onError(Throwable t) {
+                            Toast.makeText(MainActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                        @Override
+                        public void onSuccess(int code, Object receivedData) {
+                            Toast.makeText(MainActivity.this, "Login successful." , Toast.LENGTH_SHORT).show();
 
-                            }
+                            retrofitClient.loadContacts(edt_login_email.getText().toString(), new RetroCallback() {
+                                @Override
+                                public void onError(Throwable t) {
+                                    Toast.makeText(MainActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+                                }
 
-                            @Override
-                            public void onSuccess(int code, Object receivedData) {
+                                @Override
+                                public void onSuccess(int code, Object receivedData) {
+                                    // received Data connect with Intent
 
-                            }
+                                    Toast.makeText(MainActivity.this, "Loaded all contacts successful." , Toast.LENGTH_SHORT).show();
+                                }
 
-                            @Override
-                            public void onFailure(int code) {
+                                @Override
+                                public void onFailure(int code) {
+                                    Toast.makeText(MainActivity.this, "Code: " + code, Toast.LENGTH_SHORT).show();
+                                }
+                            });
 
-                            }
-                        });
+                        }
+                        @Override
+                        public void onFailure(int code) {
+                            Toast.makeText(MainActivity.this, "Code: " + code, Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
             }
         });
 
@@ -154,9 +172,7 @@ public class MainActivity extends AppCompatActivity {
                         }).show();
             }
         });
-
     }
-
         /*compositeDisposable.add(retroBaseApiService.loginUser(email, password)
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
