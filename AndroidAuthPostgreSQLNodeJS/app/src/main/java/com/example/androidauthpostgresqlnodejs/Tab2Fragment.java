@@ -54,6 +54,7 @@ public class Tab2Fragment extends Fragment {
 
     final int ADD_CONTACT = 3;
     final int ADD_CONTACT_PHOTO = 4;
+    String user_Email = "";
 
     View view;
     RecyclerView recyclerView;
@@ -70,7 +71,7 @@ public class Tab2Fragment extends Fragment {
     public ArrayList<Data> dataList = new ArrayList<>();
 
     public Tab2Fragment() {
-
+//        this.user_Email = userEmail;
     }
 
 
@@ -83,6 +84,10 @@ public class Tab2Fragment extends Fragment {
 
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        /////////////Get login-ed user email////////////////////
+        MainActivity activity = (MainActivity) getActivity();
+        user_Email = activity.getUser_Email();
 
         view = inflater.inflate(R.layout.fragment_tab2, container, false);
         FloatingActionButton add_fab = (FloatingActionButton) view.findViewById(R.id.fab);
@@ -138,6 +143,7 @@ public class Tab2Fragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), AddContact.class);
+                intent.putExtra("current_user_email", user_Email);
                 startActivityForResult(intent, ADD_CONTACT);
             }
         });

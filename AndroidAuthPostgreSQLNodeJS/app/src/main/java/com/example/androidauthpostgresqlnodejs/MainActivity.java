@@ -33,6 +33,8 @@ public class MainActivity extends AppCompatActivity {
     MaterialEditText edt_login_email, edt_login_password;
     Button btn_login;
 
+    String user_Email;
+
 //    CompositeDisposable compositeDisposable = new CompositeDisposable();
 //    @Override
 //    protected void onStop() {
@@ -77,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                         @Override
                         public void onSuccess(int code, Object receivedData) {
+
                             Toast.makeText(MainActivity.this, "Login successful." , Toast.LENGTH_SHORT).show();
 
                             retrofitClient.loadContacts(edt_login_email.getText().toString(), new RetroCallback() {
@@ -88,8 +91,11 @@ public class MainActivity extends AppCompatActivity {
                                 @Override
                                 public void onSuccess(int code, Object receivedData) {
                                     // received Data connect with Intent
+                                    Intent intent = new Intent(MainActivity.this, TabActivity.class);
+                                    user_Email = edt_login_email.getText().toString();
+//                                    intent.putExtra("user_Email", edt_login_email.getText().toString());
+                                    startActivity(intent);                  //Open tabbed activity
 
-                                    Toast.makeText(MainActivity.this, "Loaded all contacts successful." , Toast.LENGTH_SHORT).show();
                                 }
 
                                 @Override
@@ -173,13 +179,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-        /*compositeDisposable.add(retroBaseApiService.loginUser(email, password)
-        .subscribeOn(Schedulers.io())
-        .observeOn(AndroidSchedulers.mainThread())
-        .subscribe(new Consumer<String>() {
-            @Override
-            public void accept(String response) throws Exception {
-                Toast.makeText(MainActivity.this, "" + response, Toast.LENGTH_SHORT).show();
-            }
-        }));*/
+
+    public String getUser_Email() {
+        return user_Email;
+    }
+
 }
