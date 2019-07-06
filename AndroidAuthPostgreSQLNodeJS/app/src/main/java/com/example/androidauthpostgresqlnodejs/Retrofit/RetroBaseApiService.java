@@ -1,7 +1,10 @@
 package com.example.androidauthpostgresqlnodejs.Retrofit;
 
-import com.example.androidauthpostgresqlnodejs.Contact;
+import com.example.androidauthpostgresqlnodejs.Contact_Data;
 import com.example.androidauthpostgresqlnodejs.User;
+import com.google.gson.JsonArray;
+
+import org.json.JSONArray;
 
 import java.util.List;
 
@@ -18,24 +21,28 @@ public interface RetroBaseApiService {
 
    // request User, response String
     @POST("register")
-    Call<String> registerUser(@Body User user);
+    Call<Object> registerUser(@Body Object user);
 
     // request Strings, response User
     @POST("login")
-    @FormUrlEncoded
-    Call<User> loginUser(@Field("email") String email,
-                           @Field("password") String password);
+    Call<Object> loginUser(@Body Object user);
 
     @GET("contacts/{email}")
-    Call<List<Contact>> loadContacts(@Path("contacts") String email);
+    Call<List<Contact_Data>> loadContacts(@Path("email") String email);
 
     @POST("contacts")
     @FormUrlEncoded
-    Call<String> addContact(@Field("email") String email,
-                            @Field("phone_number") String phone_number,
+    Call<String> addContact(@Field("phone_number") String phone_number,
                             @Field("contact_name") String contact_name);
 
-    @DELETE("contacts/{phone_number}")
-    Call<String> deleteContact(@Path("phone_number") String phone_number);
+    @POST("update")
+    @FormUrlEncoded
+    Call<String> updateUserContacts(@Field("email") String email,
+                                    @Field("phone_number") String phone_number);
+
+    @POST("remove")
+    @FormUrlEncoded
+    Call<String> deleteContact(@Field("email") String email,
+                               @Field("phone_number") String phone_number);
 
 }

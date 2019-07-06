@@ -9,59 +9,59 @@ const pool = new Pool({
 
 
 
-// -------------------------------USER QUERIES-------------------------------------
+// // -------------------------------USER QUERIES-------------------------------------
 
-// GET all users
-const getUsers = (req, res) => {
-  pool.query('SELECT * FROM users', (error, results) => {
-    if (error) {
-      throw error
-    }
-    res.status(200).json(results.rows)
-  })
-}
+// // GET all users
+// const getUsers = (req, res) => {
+//   pool.query('SELECT * FROM users', (error, results) => {
+//     if (error) {
+//       throw error
+//     }
+//     res.status(200).json(results.rows)
+//   })
+// }
 
-// GET a single user by email for log in
-const getUserByEmail = (req, res) => {
-  const email = req.params.email
+// // GET a single user by email for log in
+// const getUserByEmail = (req, res) => {
+//   const email = req.params.email
 
-  pool.query('SELECT password FROM users WHERE email = $1', [email], (error, results) => {
-    if (error) {
-      throw error
-    }
-    res.status(200).json(results.rows)
-  })
-}
+//   pool.query('SELECT password FROM users WHERE email = $1', [email], (error, results) => {
+//     if (error) {
+//       throw error
+//     }
+//     res.status(200).json(results.rows)
+//   })
+// }
 
-//PUT updated data in an existing user
-const updateUser = (req, res) => {
-  const { email, name, password } = req.body
+// //PUT updated data in an existing user
+// const updateUser = (req, res) => {
+//   const { email, name, password } = req.body
 
-  pool.query(
-    'UPDATE users SET name = $1, password = $2 WHERE email = $3',
-    [name, password, email],
-    (error, results) => {
-      if (error) {
-        throw error
-      }
-      res.status(200).send(`User modified with email: ${email}`)
-    }
-  )
-}
+//   pool.query(
+//     'UPDATE users SET name = $1, password = $2 WHERE email = $3',
+//     [name, password, email],
+//     (error, results) => {
+//       if (error) {
+//         throw error
+//       }
+//       res.status(200).send(`User modified with email: ${email}`)
+//     }
+//   )
+// }
 
-//DELETE a user
-const deleteUser = (req, res) => {
-  const email = req.params.email
+// //DELETE a user
+// const deleteUser = (req, res) => {
+//   const email = req.params.email
 
-  pool.query('DELETE FROM users WHERE email = $1', [email], (error, results) => {
-    if (error) {
-      throw error
-    }
-    res.status(200).send(`User deleted with email: ${email}`)
-  })
-}
+//   pool.query('DELETE FROM users WHERE email = $1', [email], (error, results) => {
+//     if (error) {
+//       throw error
+//     }
+//     res.status(200).send(`User deleted with email: ${email}`)
+//   })
+// }
 
-// -------------------------------USER QUERIES-------------------------------------
+// // -------------------------------USER QUERIES-------------------------------------
 
 
 // -------------------------------CONTACT QUERIES-------------------------------------
@@ -100,7 +100,7 @@ const loginUser = (req, res) => {
 const getContactsByUser = (req, res) => {
   const email = req.params.email
 
-  pool.query('SELECT * FROM contacts INNER JOIN users ON contacts.phone_number = users_contacts.contact_number AND users_contacts.user_email = $1',
+  pool.query('SELECT phone_number, contact_name FROM contacts INNER JOIN users_contacts ON contacts.phone_number = users_contacts.contact_number AND users_contacts.user_email = $1',
    [email] , (error, results) => {
     if (error) {
       throw error
@@ -111,36 +111,54 @@ const getContactsByUser = (req, res) => {
 
 // POST a contact for a given user
 const addContact = (req, res) => {
-  const { phone_number, contact_name, email } = req.body
+  const { phone_number, contact_name } = req.body
 
-  pool.query('INSERT INTO contacts (phone_number, contact_name) VALUES ($1, $2) ON CONFLICT (phone_number) DO NOTHING; INSERT INTO users_contacts (user_email, contact_number) VALUES ($3, $1) ON CONFLICT ON CONSTRAINT users_contacts_pkey DO NOTHING',
-    [phone_number, contact_name, email], (error, results) => {
+  pool.query(
+    'INSERT INTO contacts (phone_number, contact_name) VALUES ($1, $2) ON CONFLICT (phone_number) DO NOTHING',
+    [phone_number, contact_name], (error, results) => {
       if (error) {
         throw error
       }
-      res.status(200).json(results.rows)
+      res.status(201).send(`New contact added`)
     })
+}
+
+//POST updated data in an existing user
+const updateUserContacts = (req, res) => {
+  const { email, phone_number } = req.body
+
+  pool.query('INSERT INTO users_contacts (user_email, contact_number) VALUES ($1, $2) ON CONFLICT users_contacts_pkey DO NOTHING',
+    [email, phone_number],
+    (error, results) => {
+      if (error) {
+        throw error
+      }
+      res.status(200).send("")
+    }
+  )
 }
 
 // DELETE a contact for a given user
 const deleteContact = (req, res) => {
-  const phone_number = req.params.phone_number
+  const { email, phone_number } = req.body
 
-  pool.query('DELETE FROM contacts WHERE phone_number = $1', [phone_number], (error, results) => {
+  pool.query('DELETE FROM users_contacts WHERE user_email = $1 AND contact_number = $2', [email, phone_number], (error, results) => {
     if (error) {
       throw error
     }
-    res.status(200).send(`User deleted with phone number: ${phone_number}`)
+    res.status(200).send(`Contact with number: ${phone_number}, is removed.`)
   })
 }
 
 module.exports = {
-	getUsers,
-	getUserByEmail,
+	//getUsers,
+	//getUserByEmail,
 	registerUser,
-	updateUser,
-	deleteUser,
+  loginUser,
+	//updateUser,
+	//deleteUser,
   getContactsByUser,
   addContact,
+  updateUserContacts,
   deleteContact
 }
