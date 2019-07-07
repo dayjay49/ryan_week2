@@ -94,10 +94,7 @@ public class Tab2Fragment extends Fragment {
         adapter.setOnItemClickListener(new RecyclerViewAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View v, int position, int request_code) {
-//                removeContact(v, position);
-//                contactDataList.remove(position);
-//                adapter.notifyDataSetChanged();
-//                onResume();
+
                 final String number_to_delete = contactDataList.get(position).getPhone_number();
                 adapter.deleteItem(position);
                 adapter.notifyItemRemoved(position);
