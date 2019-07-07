@@ -48,13 +48,13 @@ public interface RetroBaseApiService {
                                @Field("phone_number") String phone_number);
 
     // Tab 2 Gallery API
-    @Multipart
-    @POST("gallery")
-    Call<ResponseBody> loadGallery();
+//    @Multipart
+//    @POST("gallery")
+//    Call<ResponseBody> loadGallery();
 
     @Multipart
     @POST("gallery/add")
     Call<ResponseBody> uploadPhoto(@Part MultipartBody.Part imageFile,
-                                   @Part("user_email") RequestBody user_email,
+//                                   @Part("user_email") RequestBody user_email,
                                    @Part("image_id") RequestBody image_id);
 }

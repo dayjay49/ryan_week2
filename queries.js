@@ -100,12 +100,20 @@ const deleteContact = (req, res) => {
 // UPLOAD a photo to the server gallery
 const uploadPhoto = (req, res) => {
   console.log(req.file)
+  // const user_email = req.body.user_email
+  const image_id = req.body.image_id
 
-  const { user_email, image_id } = req.body
-  const { fieldname, originalname, encoding, mimetype, destination, filename, path, size } = req.file
+  const fieldname= req.file.fieldname
+  const originalname= req.file.originalname
+  const encoding= req.file.encoding
+  const mimetype= req.file.mimetype
+  const destination= req.file.destination
+  const filename= req.file.filename
+  const path= req.file.path
+  const size= req.file.size
 
-  pool.query('INSERT INTO gallery (user_email, image_id, fieldname, originalname, encoding, mimetype, destination, filename, path, size) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)',
-   [user_email, image_id, fieldname, originalname, encoding, mimetype, destination, filename, path, size],
+  pool.query('INSERT INTO gallery (image_id, fieldname, originalname, encoding, mimetype, destination, filename, path, size) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)',
+   [ image_id, fieldname, originalname, encoding, mimetype, destination, filename, path, size ],
     (error, results) => {
     if (error) {
       throw error

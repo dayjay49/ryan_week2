@@ -120,7 +120,7 @@ public class Tab1Fragment extends Fragment {
                         Bitmap rotatedBitmap = null;
 
                         RequestBody filePart = RequestBody.create(MediaType.parse("image/*"), file);
-                        RequestBody current_user_email = RequestBody.create(MultipartBody.FORM, user_Email);
+//                        RequestBody current_user_email = RequestBody.create(MultipartBody.FORM, user_Email);
                         RequestBody image_id = RequestBody.create(MultipartBody.FORM, new_Photo.getmIdString());
 
                         MultipartBody.Part part = MultipartBody.Part.createFormData("imageFile", file.getName(), filePart);
@@ -162,7 +162,7 @@ public class Tab1Fragment extends Fragment {
                         final RetrofitClient retrofitClient;
                         retrofitClient = RetrofitClient.getInstance(getContext()).createBaseApi();
 
-                        retrofitClient.uploadPhoto(part, current_user_email, image_id, new RetroCallback() {
+                        retrofitClient.uploadPhoto(part, image_id, new RetroCallback() {
                             @Override
                             public void onError(Throwable t) {
                                 Toast.makeText(getActivity(), t.getMessage(), Toast.LENGTH_SHORT).show();
@@ -178,7 +178,6 @@ public class Tab1Fragment extends Fragment {
                                 Toast.makeText(getActivity(), "Code: " + code, Toast.LENGTH_SHORT).show();
                             }
                         });
-
 
                     } else {
                         Toast.makeText(getActivity(), "사진 찍기를 취소하였습니다", Toast.LENGTH_SHORT).show();
