@@ -20,6 +20,8 @@ import com.example.androidauthpostgresqlnodejs.Retrofit.RetrofitClient;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class AddContact extends AppCompatActivity implements View.OnClickListener {
     //public MainActivity MainActivity;
     final int ADD_CONTACT_PHOTO=4;
@@ -31,7 +33,7 @@ public class AddContact extends AppCompatActivity implements View.OnClickListene
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_contact);
-        Button addphoto = (Button) findViewById(R.id.addedphoto);
+        CircleImageView addphoto = (CircleImageView) findViewById(R.id.addedphoto);
         final EditText addname = (EditText) findViewById(R.id.addedname);
         final EditText addnumber = (EditText) findViewById(R.id.addednumber);
 
