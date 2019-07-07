@@ -52,6 +52,7 @@ public class Tab1Fragment extends Fragment {
     public View view;
     public ArrayList<Bitmap> Gallery = new ArrayList<>();
     public ArrayList<String> path_Gallery = new ArrayList<>();
+    public ArrayList<Photo> photo_Gallery = new ArrayList<>();
     public Uri mImageUri;
     public String user_Email;
 
@@ -64,7 +65,7 @@ public class Tab1Fragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_tab1,container,false);
 
         RecyclerView recyclerViewtab2 = view.findViewById(R.id.recycler_view_tab2);
-        final RecyclerViewAdapterTab2 adapterTab2 = new RecyclerViewAdapterTab2(getActivity(), path_Gallery, Gallery);
+        final RecyclerViewAdapterTab2 adapterTab2 = new RecyclerViewAdapterTab2(getActivity(), photo_Gallery);
         recyclerViewtab2.setAdapter(adapterTab2);
         recyclerViewtab2.setLayoutManager(new GridLayoutManager(getActivity(), 3));
 
@@ -108,6 +109,8 @@ public class Tab1Fragment extends Fragment {
                     if (resultCode == RESULT_OK) {
                         String path = getRealPathFromURI(getActivity(), mImageUri);
                         path_Gallery.add(path);
+                        Photo new_Photo = new Photo(path);
+                        photo_Gallery.add(new_Photo);
 //                        Bitmap new_Photo = BitmapFactory.decodeFile(path);
 //                        Gallery.add(new_Photo);
 //                        initializeRecyclerView(Gallery);
@@ -115,6 +118,13 @@ public class Tab1Fragment extends Fragment {
                         File file = new File(path);
                         Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), Uri.fromFile(file));
                         Bitmap rotatedBitmap = null;
+
+                        RequestBody filePart = RequestBody.create(MediaType.parse("image/*"), file);
+                        RequestBody current_user_email = RequestBody.create(MultipartBody.FORM, user_Email);
+                        RequestBody image_id = RequestBody.create(MultipartBody.FORM, new_Photo.getmIdString());
+
+                        MultipartBody.Part part = MultipartBody.Part.createFormData("imageFile", file.getName(), filePart);
+
                         if (bitmap != null) {
                             try {
                                 ExifInterface ei = new ExifInterface(path);
@@ -145,20 +155,8 @@ public class Tab1Fragment extends Fragment {
 
                             }
                             Gallery.add(rotatedBitmap);
-                            initializeRecyclerView(Gallery);
-                    if (resultCode == RESULT_OK && data.hasExtra("data")) {
-                        Bitmap imageFile = (Bitmap) data.getExtras().get("data");
-                        if (imageFile != null) {
-                            Gallery.add(imageFile);
                         }
 
-                        File file = new File(filePath);
-
-                        RequestBody filePart = RequestBody.create(MediaType.parse("image/*"), file);
-                        RequestBody current_user_email = RequestBody.create(MultipartBody.FORM, user_Email);
-                        RequestBody image_id = RequestBody.create(MultipartBody.FORM, photo_id);
-
-                        MultipartBody.Part part = MultipartBody.Part.createFormData("imageFile", file.getName(), filePart);
 
                         //Initialize Service
                         final RetrofitClient retrofitClient;
@@ -180,6 +178,7 @@ public class Tab1Fragment extends Fragment {
                                 Toast.makeText(getActivity(), "Code: " + code, Toast.LENGTH_SHORT).show();
                             }
                         });
+
 
                     } else {
                         Toast.makeText(getActivity(), "사진 찍기를 취소하였습니다", Toast.LENGTH_SHORT).show();
@@ -222,7 +221,7 @@ public class Tab1Fragment extends Fragment {
 
     public void initializeRecyclerView(ArrayList<Bitmap> Gallery) {
         RecyclerView recyclerViewtab2 = view.findViewById(R.id.recycler_view_tab2);
-        RecyclerViewAdapterTab2 adapterTab2 = new RecyclerViewAdapterTab2(getActivity(),path_Gallery, Gallery);
+        RecyclerViewAdapterTab2 adapterTab2 = new RecyclerViewAdapterTab2(getActivity(), photo_Gallery);
         recyclerViewtab2.setAdapter(adapterTab2);
         recyclerViewtab2.setLayoutManager(new GridLayoutManager(getActivity(), 3));
     }

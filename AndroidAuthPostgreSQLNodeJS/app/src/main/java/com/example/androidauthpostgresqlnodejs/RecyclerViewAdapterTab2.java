@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,13 +23,12 @@ public class RecyclerViewAdapterTab2 extends RecyclerView.Adapter<RecyclerViewAd
     private static final String TAG = "RecyclerViewAdapterTab2";
 
     private Context mContext;
-    private ArrayList<Bitmap> mData;
+    private ArrayList<Photo> mData;
     private ArrayList<String> mPath;
 
-    public RecyclerViewAdapterTab2(Context mContext, ArrayList<String> mPath ,ArrayList<Bitmap> mData) {
+    public RecyclerViewAdapterTab2(Context mContext,ArrayList<Photo> mData) {
         this.mContext = mContext;
         this.mData = mData;
-        this.mPath = mPath;
     }
 
     public interface OnItemClickListener{
@@ -52,14 +52,16 @@ public class RecyclerViewAdapterTab2 extends RecyclerView.Adapter<RecyclerViewAd
 
     @Override
     public void onBindViewHolder(final TabTwoViewHolder holder, final int position) {
-        holder.img_thumbnail.setImageBitmap(mData.get(position));
+//
+        Bitmap bitmap = BitmapFactory.decodeFile(mData.get(position).getmPath());
+        holder.img_thumbnail.setImageBitmap(bitmap);
 
         holder.cardView.setOnClickListener(new View.OnClickListener() {
 //            @Override
             public void onClick(View view) {
                 Intent intent = new Intent(mContext, FullImageActivity.class);
 
-                intent.putExtra("path", mPath.get(position));
+                intent.putExtra("path", mData.get(position).getmPath());
                 view.getContext().startActivity(intent);
             }
         });
