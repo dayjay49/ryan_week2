@@ -89,37 +89,41 @@ public class MainActivity extends AppCompatActivity {
                         }
                         @Override
                         public void onSuccess(int code, Object receivedData) {
-                            Toast.makeText(MainActivity.this, "Login succesful!" , Toast.LENGTH_SHORT).show();
+                            ArrayList<User> receivedList = (ArrayList<User>) receivedData;
+                            if (receivedList.size() == 0) {
+                                Toast.makeText(MainActivity.this, "Wrong email and/or password. Please enter valid email and password." , Toast.LENGTH_SHORT).show();
+                            }
+                            else {
+                                Toast.makeText(MainActivity.this, "Login successful!", Toast.LENGTH_SHORT).show();
 
-                            retrofitClient.loadContacts(login_user.getEmail(), new RetroCallback() {
-                                @Override
-                                public void onError(Throwable t) {
-                                    Toast.makeText(MainActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
-                                }
+                                retrofitClient.loadContacts(login_user.getEmail(), new RetroCallback() {
+                                    @Override
+                                    public void onError(Throwable t) {
+                                        Toast.makeText(MainActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+                                    }
 
-                                @Override
-                                public void onSuccess(int code, Object receivedData) {
-                                    // received Contact_Data connect with Intent
-                                    Intent intent = new Intent(MainActivity.this, TabActivity.class);
-                                    contactList = (List<Contact_Data>) receivedData;
-                                    user_Email = login_user.getEmail();
+                                    @Override
+                                    public void onSuccess(int code, Object receivedData) {
+                                        // received Contact_Data connect with Intent
+                                        Intent intent = new Intent(MainActivity.this, TabActivity.class);
+                                        contactList = (List<Contact_Data>) receivedData;
+                                        user_Email = login_user.getEmail();
 //                                    intent.putExtra("user_Email", edt_login_email.getText().toString());
-                                    startActivity(intent);                  //Open tabbed activity
-                                }
+                                        startActivity(intent);                  //Open tabbed activity
+                                    }
 
-                                @Override
-                                public void onFailure(int code) {
-                                    Toast.makeText(MainActivity.this, "Code: " + code, Toast.LENGTH_SHORT).show();
-                                }
-                            });
-
+                                    @Override
+                                    public void onFailure(int code) {
+                                        Toast.makeText(MainActivity.this, "Code: " + code, Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                            }
                         }
                         @Override
                         public void onFailure(int code) {
                             Toast.makeText(MainActivity.this, "Code: " + code, Toast.LENGTH_SHORT).show();
                         }
                     });
-
             }
         });
 
@@ -190,23 +194,4 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
-//    @Override
-//    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-//        super.onActivityResult(requestCode, resultCode, intent);
-//
-//        if (requestCode == EXIT_APP && resultCode == RESULT_OK) {
-//            finish();
-//            System.exit(0);
-//        }
-//
-//    }
-//    public String getUser_Email() {
-//        return user_Email;
-//    }
-//
-//    public ArrayList<Contact_Data> getContactList() {
-//        return contactList;
-//    }
-
 }
