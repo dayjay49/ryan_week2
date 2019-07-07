@@ -86,6 +86,7 @@ public class AddContact extends AppCompatActivity implements View.OnClickListene
 
                             @Override
                             public void onSuccess(int code, Object receivedData) {
+                                Toast.makeText(getApplicationContext(), "New contact successfully added!", Toast.LENGTH_SHORT).show();
                             }
 
                             @Override

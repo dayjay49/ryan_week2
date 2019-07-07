@@ -83,7 +83,7 @@ const registerUser = (req, res) => {
 const loginUser = (req, res) => {
   const { email, password } = req.body
 
-  pool.query('SELECT email FROM users WHERE email = $1 AND password = $2' , [email, password], (error, results) => {
+  pool.query('SELECT * FROM users WHERE email = $1 AND password = $2' , [email, password], (error, results) => {
     if (error) {
       throw error
     }
@@ -127,13 +127,13 @@ const addContact = (req, res) => {
 const updateUserContacts = (req, res) => {
   const { email, phone_number } = req.body
 
-  pool.query('INSERT INTO users_contacts (user_email, contact_number) VALUES ($1, $2) ON CONFLICT users_contacts_pkey DO NOTHING',
+  pool.query('INSERT INTO users_contacts (user_email, contact_number) VALUES ($1, $2) ON CONFLICT ON CONSTRAINT users_contacts_pkey DO NOTHING',
     [email, phone_number],
     (error, results) => {
       if (error) {
         throw error
       }
-      res.status(200).send("")
+      res.status(200).send("Updated contacts for current user!")
     }
   )
 }

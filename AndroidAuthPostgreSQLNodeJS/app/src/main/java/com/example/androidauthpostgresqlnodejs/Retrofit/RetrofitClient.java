@@ -82,11 +82,11 @@ public class RetrofitClient {
         });
     }
     // POST
-    public void loginUser(Object user, final RetroCallback callback) {
-        Call<Object> call = apiService.loginUser(user);
-        call.enqueue(new Callback<Object>() {
+    public void loginUser(User user, final RetroCallback callback) {
+        Call<List<User>> call = apiService.loginUser(user);
+        call.enqueue(new Callback<List<User>>() {
             @Override
-            public void onResponse(Call<Object> call, Response<Object> response) {
+            public void onResponse(Call<List<User>> call, Response<List<User>> response) {
                 if (!response.isSuccessful()) {
                     callback.onFailure(response.code());
                 } else {
@@ -95,7 +95,7 @@ public class RetrofitClient {
             }
 
             @Override
-            public void onFailure(Call<Object> call, Throwable t) {
+            public void onFailure(Call<List<User>> call, Throwable t) {
                 callback.onError(t);
             }
         });
