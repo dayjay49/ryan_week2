@@ -88,7 +88,8 @@ const updateUserContacts = (req, res) => {
 const deleteContact = (req, res) => {
   const { email, phone_number } = req.body
 
-  pool.query('DELETE FROM users_contacts WHERE user_email = $1 AND contact_number = $2', [email, phone_number], (error, results) => {
+  pool.query('DELETE FROM users_contacts WHERE user_email = $1 AND contact_number = $2', 
+    [email, phone_number], (error, results) => {
     if (error) {
       throw error
     }
@@ -97,11 +98,24 @@ const deleteContact = (req, res) => {
   })
 }
 
+// LOAD gallery from server
+const loadGallery = (req, res) => {
+  const email = req.params.email
+
+  pool.query('SELECT path FROM gallery INNER JOIN users_gallery ON gallery.filename = users_gallery.filename AND users_gallery.user_email = $1',
+   [email], (error, results) => {
+    if (error) {
+      throw error
+    }
+    res.status(200).
+  })
+}
+
 // UPLOAD a photo to the server gallery
 const uploadPhoto = (req, res) => {
   console.log(req.file)
   // const user_email = req.body.user_email
-  const image_id = req.body.image_id
+  // const image_id = req.body.image_id
 
   const fieldname= req.file.fieldname
   const originalname= req.file.originalname
@@ -112,17 +126,29 @@ const uploadPhoto = (req, res) => {
   const path= req.file.path
   const size= req.file.size
 
-  pool.query('INSERT INTO gallery (image_id, fieldname, originalname, encoding, mimetype, destination, filename, path, size) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)',
-   [ image_id, fieldname, originalname, encoding, mimetype, destination, filename, path, size ],
+  pool.query('INSERT INTO gallery (fieldname, originalname, encoding, mimetype, destination, filename, path, size) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) ON CONFLICT (filename) DO NOTHING',
+   [ fieldname, originalname, encoding, mimetype, destination, filename, path, size ],
     (error, results) => {
     if (error) {
       throw error
     }
-    res.status(201).send(`New photo uploaded.`)
-    console.log('bitch im sleepy now')
+    res.status(201).send(`${filename}`)
   })
 }
 
+// POST updated gallery in an existing user
+const updateUserGallery = (req, res) => {
+  const { email, filename } = req.body
+
+  pool.query('INSERT INTO users_gallery (user_email, filename) VALUES ($1, $2) ON CONFLICT ON CONSTRAINT users_gallery_pkey DO NOTHING',
+   [email, filename], (error, results) => {
+    if (error) {
+      throw error
+    }
+    res.status(200).send('Updated gallery for current user!')
+    console.log('Updated gallery for current user!')
+  })
+}
 
 module.exports = {
 	registerUser,
@@ -131,5 +157,7 @@ module.exports = {
   addContact,
   updateUserContacts,
   deleteContact,
-  uploadPhoto
+  loadGallery,
+  uploadPhoto,
+  updateUserGallery
 }

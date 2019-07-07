@@ -21,6 +21,7 @@ import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
 import retrofit2.http.Path;
+import retrofit2.http.Url;
 
 public interface RetroBaseApiService {
 
@@ -48,13 +49,20 @@ public interface RetroBaseApiService {
                                @Field("phone_number") String phone_number);
 
     // Tab 2 Gallery API
-//    @Multipart
-//    @POST("gallery")
-//    Call<ResponseBody> loadGallery();
+    @Multipart
+    @GET("gallery/{email}")
+    Call<List<String>> loadGallery(@Path("email") String email);
 
     @Multipart
     @POST("gallery/add")
-    Call<ResponseBody> uploadPhoto(@Part MultipartBody.Part imageFile,
+    Call<Object> uploadPhoto(@Part MultipartBody.Part imageFile);
 //                                   @Part("user_email") RequestBody user_email,
-                                   @Part("image_id") RequestBody image_id);
+//                                   @Part("image_id") RequestBody image_id);
+
+    @POST("gallery/update")
+    @FormUrlEncoded
+    Call<String> updateUserGallery(@Field("email") String email,
+                                   @Field("filename") String filename);
+
+
 }

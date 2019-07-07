@@ -33,8 +33,8 @@ var connection = "postgres://postgres:1234@localhost/week2db";
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
-app.use('./my_uploads/', express.static('./my_uploads/'))
-
+app.use(express.static(__dirname + '/my_uploads/'))
+//'./my_uploads/', express.static('./my_uploads/')
 
 app.get('/', function(req, res) {
 	console.log('TEST');
@@ -47,7 +47,9 @@ app.get('/contacts/:email', db.getContactsByUser)
 app.post('/contacts', db.addContact)
 app.post('/update', db.updateUserContacts)
 app.post('/remove', db.deleteContact)
+app.post('/gallery/:email', db.loadGallery)
 app.post('/gallery/add', upload.single('imageFile'), db.uploadPhoto)
+app.post('/gallery/update', db.updateUserGallery)
 
 // Server
 app.listen(port, () => {

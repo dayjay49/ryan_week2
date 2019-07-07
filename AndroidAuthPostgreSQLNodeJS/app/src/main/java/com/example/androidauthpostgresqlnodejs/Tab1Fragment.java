@@ -109,7 +109,7 @@ public class Tab1Fragment extends Fragment {
                     if (resultCode == RESULT_OK) {
                         String path = getRealPathFromURI(getActivity(), mImageUri);
                         path_Gallery.add(path);
-                        Photo new_Photo = new Photo(path);
+                        final Photo new_Photo = new Photo(path);
                         photo_Gallery.add(new_Photo);
 //                        Bitmap new_Photo = BitmapFactory.decodeFile(path);
 //                        Gallery.add(new_Photo);
@@ -121,7 +121,7 @@ public class Tab1Fragment extends Fragment {
 
                         RequestBody filePart = RequestBody.create(MediaType.parse("image/*"), file);
 //                        RequestBody current_user_email = RequestBody.create(MultipartBody.FORM, user_Email);
-                        RequestBody image_id = RequestBody.create(MultipartBody.FORM, new_Photo.getmIdString());
+//                        RequestBody image_id = RequestBody.create(MultipartBody.FORM, new_Photo.getmIdString());
 
                         MultipartBody.Part part = MultipartBody.Part.createFormData("imageFile", file.getName(), filePart);
 
@@ -157,12 +157,11 @@ public class Tab1Fragment extends Fragment {
                             Gallery.add(rotatedBitmap);
                         }
 
-
                         //Initialize Service
                         final RetrofitClient retrofitClient;
                         retrofitClient = RetrofitClient.getInstance(getContext()).createBaseApi();
 
-                        retrofitClient.uploadPhoto(part, image_id, new RetroCallback() {
+                        retrofitClient.uploadPhoto(part, new RetroCallback() {
                             @Override
                             public void onError(Throwable t) {
                                 Toast.makeText(getActivity(), t.getMessage(), Toast.LENGTH_SHORT).show();
@@ -170,7 +169,26 @@ public class Tab1Fragment extends Fragment {
 
                             @Override
                             public void onSuccess(int code, Object receivedData) {
-                                initializeRecyclerView(Gallery);
+
+                                String filename = (String) receivedData;
+
+                                retrofitClient.updateUserGallery(user_Email, filename, new RetroCallback() {
+                                    @Override
+                                    public void onError(Throwable t) {
+                                        Toast.makeText(getActivity(), t.getMessage(), Toast.LENGTH_SHORT).show();
+                                    }
+
+                                    @Override
+                                    public void onSuccess(int code, Object receivedData) {
+                                        Toast.makeText(getActivity(), "Uploaded photo taken.", Toast.LENGTH_SHORT).show();
+                                        initializeRecyclerView(Gallery);
+                                    }
+
+                                    @Override
+                                    public void onFailure(int code) {
+                                        Toast.makeText(getActivity(), "Code: " + code, Toast.LENGTH_SHORT).show();
+                                    }
+                                });
                             }
 
                             @Override

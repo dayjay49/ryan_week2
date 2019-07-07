@@ -178,10 +178,28 @@ public class RetrofitClient {
         });
     }
 
-    public void uploadPhoto(MultipartBody.Part imageFile, RequestBody image_id, final RetroCallback callback) {
-        apiService.uploadPhoto(imageFile, image_id).enqueue(new Callback<ResponseBody>() {
+    public void loadGallery(String email, final RetroCallback callback) {
+        apiService.loadGallery(email).enqueue(new Callback<List<String>>() {
             @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+            public void onResponse(Call<List<String>> call, Response<List<String>> response) {
+                if (!response.isSuccessful()) {
+                    callback.onFailure(response.code());
+                } else {
+                    callback.onSuccess(response.code(), response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<String>> call, Throwable t) {
+                callback.onError(t);
+            }
+        });
+    }
+
+    public void uploadPhoto(MultipartBody.Part imageFile, final RetroCallback callback) {
+        apiService.uploadPhoto(imageFile).enqueue(new Callback<Object>() {
+            @Override
+            public void onResponse(Call<Object> call, Response<Object> response) {
                 if (!response.isSuccessful()) {
                     callback.onFailure(response.code());
                 } else {
@@ -189,7 +207,24 @@ public class RetrofitClient {
                 }
             }
             @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
+            public void onFailure(Call<Object> call, Throwable t) {
+                callback.onError(t);
+            }
+        });
+    }
+
+    public void updateUserGallery(String email, String filename, final RetroCallback callback) {
+        apiService.updateUserGallery(email, filename).enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                if (!response.isSuccessful()) {
+                    callback.onFailure(response.code());
+                } else {
+                    callback.onSuccess(response.code(), response.body());
+                }
+            }
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
                 callback.onError(t);
             }
         });
