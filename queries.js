@@ -7,63 +7,6 @@ const pool = new Pool({
   port: 5432,
 })
 
-
-
-// // -------------------------------USER QUERIES-------------------------------------
-
-// // GET all users
-// const getUsers = (req, res) => {
-//   pool.query('SELECT * FROM users', (error, results) => {
-//     if (error) {
-//       throw error
-//     }
-//     res.status(200).json(results.rows)
-//   })
-// }
-
-// // GET a single user by email for log in
-// const getUserByEmail = (req, res) => {
-//   const email = req.params.email
-
-//   pool.query('SELECT password FROM users WHERE email = $1', [email], (error, results) => {
-//     if (error) {
-//       throw error
-//     }
-//     res.status(200).json(results.rows)
-//   })
-// }
-
-// //PUT updated data in an existing user
-// const updateUser = (req, res) => {
-//   const { email, name, password } = req.body
-
-//   pool.query(
-//     'UPDATE users SET name = $1, password = $2 WHERE email = $3',
-//     [name, password, email],
-//     (error, results) => {
-//       if (error) {
-//         throw error
-//       }
-//       res.status(200).send(`User modified with email: ${email}`)
-//     }
-//   )
-// }
-
-// //DELETE a user
-// const deleteUser = (req, res) => {
-//   const email = req.params.email
-
-//   pool.query('DELETE FROM users WHERE email = $1', [email], (error, results) => {
-//     if (error) {
-//       throw error
-//     }
-//     res.status(200).send(`User deleted with email: ${email}`)
-//   })
-// }
-
-// // -------------------------------USER QUERIES-------------------------------------
-
-
 // -------------------------------CONTACT QUERIES-------------------------------------
 
 //POST a new user
@@ -87,7 +30,13 @@ const loginUser = (req, res) => {
     if (error) {
       throw error
     }
-    res.status(200).json(results.rows)
+    if (results.length == 0) {
+      console.log('No matching email and password found.')
+    }
+    else{
+      res.status(200).json(results.rows)
+      console.log('Login successful.')
+    }
   })
 }
 
@@ -101,6 +50,7 @@ const getContactsByUser = (req, res) => {
       throw error
     }
     res.status(200).json(results.rows)
+    console.log('Contacts for logged in user loaded.')
   })
 }
 
@@ -129,6 +79,7 @@ const updateUserContacts = (req, res) => {
         throw error
       }
       res.status(200).send("Updated contacts for current user!")
+      console.log('New contact added for user')
     }
   )
 }
@@ -142,18 +93,35 @@ const deleteContact = (req, res) => {
       throw error
     }
     res.status(200).send(`Contact with number: ${phone_number}, is removed.`)
+    console.log(`Contact with phone number: ${phone_number} deleted.`)
   })
 }
 
+// UPLOAD a photo to the server gallery
+const uploadPhoto = (req, res) => {
+  console.log(req.file)
+
+  const { user_email, image_id } = req.body
+  const { fieldname, originalname, encoding, mimetype, destination, filename, path, size } = req.file
+
+  pool.query('',
+   [user_email, image_id, fieldname, originalname, encoding, mimetype, destination, filename, path, size],
+    (error, results) => {
+    if (error) {
+      throw error
+    }
+    res.status(200000000000000000000).send(``)
+    console.log('bitch im sleepy now')
+  })
+}
+
+
 module.exports = {
-	//getUsers,
-	//getUserByEmail,
 	registerUser,
   loginUser,
-	//updateUser,
-	//deleteUser,
   getContactsByUser,
   addContact,
   updateUserContacts,
-  deleteContact
+  deleteContact,
+  uploadPhoto
 }

@@ -32,11 +32,17 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.androidauthpostgresqlnodejs.Retrofit.RetroCallback;
+import com.example.androidauthpostgresqlnodejs.Retrofit.RetrofitClient;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
+
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -45,13 +51,11 @@ public class Tab1Fragment extends Fragment {
 
     public View view;
     public ArrayList<Bitmap> Gallery = new ArrayList<>();
-    public ArrayList<String> path_Gallery = new ArrayList<>();
     public Uri mImageUri;
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
+        user_Email = MainActivity.login_user.getEmail();
 
         super.onCreate(savedInstanceState);
 
@@ -75,8 +79,6 @@ public class Tab1Fragment extends Fragment {
             }
         });
 
-
-
         adapterTab2.setOnItemClickListener(new RecyclerViewAdapterTab2.OnItemClickListener() {
             @Override
             public void onItemClick(View v, int position, int request_code) {
@@ -91,8 +93,6 @@ public class Tab1Fragment extends Fragment {
 
             }
         });
-
-
         return view;
     }
 
@@ -144,7 +144,41 @@ public class Tab1Fragment extends Fragment {
                             }
                             Gallery.add(rotatedBitmap);
                             initializeRecyclerView(Gallery);
+                    if (resultCode == RESULT_OK && data.hasExtra("data")) {
+                        Bitmap imageFile = (Bitmap) data.getExtras().get("data");
+                        if (imageFile != null) {
+                            Gallery.add(imageFile);
                         }
+
+                        File file = new File(filePath);
+
+                        RequestBody filePart = RequestBody.create(MediaType.parse("image/*"), file);
+                        RequestBody current_user_email = RequestBody.create(MultipartBody.FORM, user_Email);
+                        RequestBody image_id = RequestBody.create(MultipartBody.FORM, photo_id);
+
+                        MultipartBody.Part part = MultipartBody.Part.createFormData("imageFile", file.getName(), filePart);
+
+                        //Initialize Service
+                        final RetrofitClient retrofitClient;
+                        retrofitClient = RetrofitClient.getInstance(getContext()).createBaseApi();
+
+                        retrofitClient.uploadPhoto(part, current_user_email, image_id, new RetroCallback() {
+                            @Override
+                            public void onError(Throwable t) {
+                                Toast.makeText(getActivity(), t.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+
+                            @Override
+                            public void onSuccess(int code, Object receivedData) {
+                                initializeRecyclerView(Gallery);
+                            }
+
+                            @Override
+                            public void onFailure(int code) {
+                                Toast.makeText(getActivity(), "Code: " + code, Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
                     } else {
                         Toast.makeText(getActivity(), "사진 찍기를 취소하였습니다", Toast.LENGTH_SHORT).show();
                     }
