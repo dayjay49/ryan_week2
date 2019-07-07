@@ -21,7 +21,7 @@ import com.example.androidauthpostgresqlnodejs.Tab3Fragment;
 public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
     @StringRes
-    private static final int[] TAB_TITLES = new int[]{R.string.tab_text_1, R.string.tab_text_2, R.string.tab_text_3};
+    private static final int[] TAB_TITLES = new int[]{R.string.tab_text_2, R.string.tab_text_1, R.string.tab_text_3};
     private final Context mContext;
 
     public SectionsPagerAdapter(Context context, FragmentManager fm) {
@@ -37,11 +37,11 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
             case 0:
 //                fragment = Fragment.instantiate(mContext,"Tab 1");
 //                break;
-                return new Tab1Fragment();
+                return new Tab2Fragment();
             case 1:
 //                fragment = Fragment.instantiate(mContext, "Tab 2");
 //                break;
-                return new Tab2Fragment();
+                return new Tab1Fragment();
             case 2:
 //                fragment = Fragment.instantiate(mContext, "Tab 3");
 //                break;

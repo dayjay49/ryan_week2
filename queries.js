@@ -87,12 +87,7 @@ const loginUser = (req, res) => {
     if (error) {
       throw error
     }
-    else if (results.length == 0) {
-      res.status(400).send(`Wrong email and/or password. Please enter valid email and password.`)
-    }
-    else{
-      res.status(200).json(results.rows)
-    }
+    res.status(200).json(results.rows)
   })
 }
 
