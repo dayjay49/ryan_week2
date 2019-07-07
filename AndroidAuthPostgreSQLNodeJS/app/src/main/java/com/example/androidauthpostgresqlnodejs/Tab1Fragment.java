@@ -51,7 +51,9 @@ public class Tab1Fragment extends Fragment {
 
     public View view;
     public ArrayList<Bitmap> Gallery = new ArrayList<>();
+    public ArrayList<String> path_Gallery = new ArrayList<>();
     public Uri mImageUri;
+    public String user_Email;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -62,7 +64,7 @@ public class Tab1Fragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_tab1,container,false);
 
         RecyclerView recyclerViewtab2 = view.findViewById(R.id.recycler_view_tab2);
-        final RecyclerViewAdapterTab2 adapterTab2 = new RecyclerViewAdapterTab2(getActivity(), path_Gallery,Gallery);
+        final RecyclerViewAdapterTab2 adapterTab2 = new RecyclerViewAdapterTab2(getActivity(), path_Gallery, Gallery);
         recyclerViewtab2.setAdapter(adapterTab2);
         recyclerViewtab2.setLayoutManager(new GridLayoutManager(getActivity(), 3));
 
@@ -184,7 +186,7 @@ public class Tab1Fragment extends Fragment {
                     }
                     break;
             }
-        } catch(Exception e) {
+        } catch (Exception e) {
             Toast.makeText(getActivity(), "Oops! 로딩에 오류가 있습니다.", Toast.LENGTH_LONG).show();
             e.printStackTrace();
         }
