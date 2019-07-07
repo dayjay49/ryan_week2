@@ -2,6 +2,9 @@ package com.example.androidauthpostgresqlnodejs;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -23,27 +26,69 @@ public class FullImageActivity extends AppCompatActivity {
 
         Intent i = getIntent();
 
-        Bitmap photo = (Bitmap) i.getParcelableExtra("photo");
-//        Bitmap resized_photo = resizingBitmap(photo, 5.3);
+        String path = (String) i.getStringExtra("path");
+        Bitmap bitmap = BitmapFactory.decodeFile(path);
+        Bitmap rotatedBitmap = null;
+        if (bitmap != null) {
+            try {
+                ExifInterface ei = new ExifInterface(path);
+                int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION,
+                        ExifInterface.ORIENTATION_UNDEFINED);
+
+                rotatedBitmap = null;
+                switch (orientation) {
+
+                    case ExifInterface.ORIENTATION_ROTATE_90:
+                        rotatedBitmap = rotateImage(bitmap, 90);
+                        break;
+
+                    case ExifInterface.ORIENTATION_ROTATE_180:
+                        rotatedBitmap = rotateImage(bitmap, 180);
+                        break;
+
+                    case ExifInterface.ORIENTATION_ROTATE_270:
+                        rotatedBitmap = rotateImage(bitmap, 270);
+                        break;
+
+                    case ExifInterface.ORIENTATION_NORMAL:
+                    default:
+                        rotatedBitmap = bitmap;
+                        break;
+                }
+            } catch (Exception e) {
+
+            }
+
+        }
+
+
+
 
         ImageView GalleryPreviewImg = (ImageView) findViewById(R.id.full_image_view);
 //        Glide.with(FullImageActivity.this)
 //                .load(photo) // Uri of the picture
 //                .into(GalleryPreviewImg);
-        GalleryPreviewImg.setImageBitmap(photo);
+        GalleryPreviewImg.setImageBitmap(rotatedBitmap);
 
-        View.OnClickListener closebtn_listener = new View.OnClickListener(){
-            @Override
-            public  void onClick(View v){
-                finish();
-            }
-        };
-        Button closeLogin = (Button) findViewById(R.id.close_button);
-        closeLogin.setOnClickListener(closebtn_listener) ;
+//        View.OnClickListener closebtn_listener = new View.OnClickListener(){
+//            @Override
+//            public  void onClick(View v){
+//                finish();
+//            }
+//        };
+//        Button closeLogin = (Button) findViewById(R.id.close_button);
+//        closeLogin.setOnClickListener(closebtn_listener) ;
 
 
 
     }
+
+    public static Bitmap rotateImage(Bitmap source, float angle) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(angle);
+        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
+    }
+
 
 //    public Bitmap resizingBitmap(Bitmap oBitmap){
 //        if (oBitmap == null)

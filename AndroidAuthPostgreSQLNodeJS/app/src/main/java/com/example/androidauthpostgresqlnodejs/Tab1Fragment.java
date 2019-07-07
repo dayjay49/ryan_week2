@@ -2,12 +2,15 @@ package com.example.androidauthpostgresqlnodejs;
 
 import android.content.ContentResolver;
 import android.content.ContentUris;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.hardware.Camera;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -48,7 +51,10 @@ public class Tab1Fragment extends Fragment {
 
     public View view;
     public ArrayList<Bitmap> Gallery = new ArrayList<>();
-    String user_Email;
+    public ArrayList<String> path_Gallery = new ArrayList<>();
+    public ArrayList<Photo> photo_Gallery = new ArrayList<>();
+    public Uri mImageUri;
+    public String user_Email;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -59,7 +65,7 @@ public class Tab1Fragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_tab1,container,false);
 
         RecyclerView recyclerViewtab2 = view.findViewById(R.id.recycler_view_tab2);
-        final RecyclerViewAdapterTab2 adapterTab2 = new RecyclerViewAdapterTab2(getActivity(), Gallery);
+        final RecyclerViewAdapterTab2 adapterTab2 = new RecyclerViewAdapterTab2(getActivity(), photo_Gallery);
         recyclerViewtab2.setAdapter(adapterTab2);
         recyclerViewtab2.setLayoutManager(new GridLayoutManager(getActivity(), 3));
 
@@ -67,7 +73,11 @@ public class Tab1Fragment extends Fragment {
         button_camera.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
+                 mImageUri = getActivity().getContentResolver().insert(
+                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI, new ContentValues()
+                );
                 Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, mImageUri);
                 startActivityForResult(cameraIntent, TAKE_PICTURE);
             }
         });
@@ -96,19 +106,57 @@ public class Tab1Fragment extends Fragment {
         try{
             switch (requestCode) {
                 case TAKE_PICTURE:
-                    if (resultCode == RESULT_OK && data.hasExtra("data")) {
-                        Bitmap imageFile = (Bitmap) data.getExtras().get("data");
-                        if (imageFile != null) {
-                            Gallery.add(imageFile);
-                        }
+                    if (resultCode == RESULT_OK) {
+                        String path = getRealPathFromURI(getActivity(), mImageUri);
+                        path_Gallery.add(path);
+                        Photo new_Photo = new Photo(path);
+                        photo_Gallery.add(new_Photo);
+//                        Bitmap new_Photo = BitmapFactory.decodeFile(path);
+//                        Gallery.add(new_Photo);
+//                        initializeRecyclerView(Gallery);
 
-                        File file = new File(filePath);
+                        File file = new File(path);
+                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), Uri.fromFile(file));
+                        Bitmap rotatedBitmap = null;
 
                         RequestBody filePart = RequestBody.create(MediaType.parse("image/*"), file);
                         RequestBody current_user_email = RequestBody.create(MultipartBody.FORM, user_Email);
-                        RequestBody image_id = RequestBody.create(MultipartBody.FORM, photo_id);
+                        RequestBody image_id = RequestBody.create(MultipartBody.FORM, new_Photo.getmIdString());
 
                         MultipartBody.Part part = MultipartBody.Part.createFormData("imageFile", file.getName(), filePart);
+
+                        if (bitmap != null) {
+                            try {
+                                ExifInterface ei = new ExifInterface(path);
+                                int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION,
+                                        ExifInterface.ORIENTATION_UNDEFINED);
+
+                                rotatedBitmap = null;
+                                switch (orientation) {
+
+                                    case ExifInterface.ORIENTATION_ROTATE_90:
+                                        rotatedBitmap = rotateImage(bitmap, 90);
+                                        break;
+
+                                    case ExifInterface.ORIENTATION_ROTATE_180:
+                                        rotatedBitmap = rotateImage(bitmap, 180);
+                                        break;
+
+                                    case ExifInterface.ORIENTATION_ROTATE_270:
+                                        rotatedBitmap = rotateImage(bitmap, 270);
+                                        break;
+
+                                    case ExifInterface.ORIENTATION_NORMAL:
+                                    default:
+                                        rotatedBitmap = bitmap;
+                                        break;
+                                }
+                            } catch (Exception e) {
+
+                            }
+                            Gallery.add(rotatedBitmap);
+                        }
+
 
                         //Initialize Service
                         final RetrofitClient retrofitClient;
@@ -131,14 +179,40 @@ public class Tab1Fragment extends Fragment {
                             }
                         });
 
+
                     } else {
                         Toast.makeText(getActivity(), "사진 찍기를 취소하였습니다", Toast.LENGTH_SHORT).show();
                     }
                     break;
             }
-        } catch(Exception e) {
+        } catch (Exception e) {
             Toast.makeText(getActivity(), "Oops! 로딩에 오류가 있습니다.", Toast.LENGTH_LONG).show();
             e.printStackTrace();
+        }
+    }
+
+
+
+    public Bitmap rotateImage(Bitmap source, float angle) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(angle);
+        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
+    }
+
+    private String getRealPathFromURI(Context context, Uri contentUri) {
+        Cursor cursor = null;
+        try {
+            String[] proj = {MediaStore.Images.Media.DATA};
+            cursor = context.getContentResolver().query(contentUri, proj, null, null, null);
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            cursor.moveToFirst();
+            return cursor.getString(column_index);
+        } catch (Exception e){
+            return "";
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
         }
     }
 
@@ -147,7 +221,7 @@ public class Tab1Fragment extends Fragment {
 
     public void initializeRecyclerView(ArrayList<Bitmap> Gallery) {
         RecyclerView recyclerViewtab2 = view.findViewById(R.id.recycler_view_tab2);
-        RecyclerViewAdapterTab2 adapterTab2 = new RecyclerViewAdapterTab2(getActivity(), Gallery);
+        RecyclerViewAdapterTab2 adapterTab2 = new RecyclerViewAdapterTab2(getActivity(), photo_Gallery);
         recyclerViewtab2.setAdapter(adapterTab2);
         recyclerViewtab2.setLayoutManager(new GridLayoutManager(getActivity(), 3));
     }

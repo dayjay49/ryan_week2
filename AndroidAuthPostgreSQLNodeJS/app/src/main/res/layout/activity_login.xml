@@ -25,14 +25,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 
-            <TextView
-                android:text="WOW SO CUTE~"
-                android:textStyle="bold"
-                android:textColor="@color/myDarkerGray"
-                android:layout_margin="16dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
         </FrameLayout>
         
     </LinearLayout>
@@ -40,7 +32,7 @@
     <LinearLayout
         android:orientation="vertical"
         android:background="@android:color/white"
-        android:layout_margin="16dp"
+        android:layout_margin="0dp"
         android:padding="16dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -74,7 +66,7 @@
     <Button
         android:id="@+id/btn_login"
         android:layout_margin="16dp"
-        android:background="@color/colorAccent"
+        android:background="@color/ryancolor"
         android:text="LOGIN"
         android:textSize="20sp"
         android:textColor="@color/myDarkerGray"
@@ -82,11 +74,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
+    <!--<TextView-->
+        <!--android:id="@+id/textView2"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_gravity="center"-->
+        <!--android:text="Don't have account?" />-->
+
     <Button
         android:id="@+id/btn_create_account"
         style="@style/Widget.AppCompat.Button.Borderless.Colored"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="26dp"
         android:layout_gravity="center"
         android:layout_margin="16dp"
         android:background="@color/colorPrimary"
