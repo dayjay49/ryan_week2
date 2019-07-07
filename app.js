@@ -47,7 +47,7 @@ app.get('/contacts/:email', db.getContactsByUser)
 app.post('/contacts', db.addContact)
 app.post('/update', db.updateUserContacts)
 app.post('/remove', db.deleteContact)
-app.post('/upload', upload.single("imageFile"), db.uploadPhoto)
+app.post('/gallery/add', upload.single('imageFile'), db.uploadPhoto)
 
 // Server
 app.listen(port, () => {

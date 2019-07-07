@@ -104,13 +104,13 @@ const uploadPhoto = (req, res) => {
   const { user_email, image_id } = req.body
   const { fieldname, originalname, encoding, mimetype, destination, filename, path, size } = req.file
 
-  pool.query('',
+  pool.query('INSERT INTO gallery (user_email, image_id, fieldname, originalname, encoding, mimetype, destination, filename, path, size) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)',
    [user_email, image_id, fieldname, originalname, encoding, mimetype, destination, filename, path, size],
     (error, results) => {
     if (error) {
       throw error
     }
-    res.status(200000000000000000000).send(``)
+    res.status(201).send(`New photo uploaded.`)
     console.log('bitch im sleepy now')
   })
 }
