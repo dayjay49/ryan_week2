@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
     String user_Email;
     public static List<Contact_Data> contactList;
     public static User login_user;
+    final int EXIT_APP = 9;
 
 //    CompositeDisposable compositeDisposable = new CompositeDisposable();
 //    @Override
@@ -88,8 +89,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                         @Override
                         public void onSuccess(int code, Object receivedData) {
-
-                            Toast.makeText(MainActivity.this, "Login successful." , Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MainActivity.this, "Login succesful!" , Toast.LENGTH_SHORT).show();
 
                             retrofitClient.loadContacts(login_user.getEmail(), new RetroCallback() {
                                 @Override
@@ -123,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        txt_create_account = findViewById(R.id.txt_create_account);
+        txt_create_account = findViewById(R.id.btn_create_account);
         txt_create_account.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -131,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
 
                 new MaterialStyledDialog.Builder(MainActivity.this)
                         .setIcon(R.drawable.ic_user)
-                        .setTitle("REGISTRATION")
+                        .setTitle("CREATE NEW ACCOUNT")
                         .setDescription("Please fill all fields")
                         .setCustomView(register_layout)
                         .setNegativeText("CANCEL")
@@ -191,6 +191,16 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+//    @Override
+//    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+//        super.onActivityResult(requestCode, resultCode, intent);
+//
+//        if (requestCode == EXIT_APP && resultCode == RESULT_OK) {
+//            finish();
+//            System.exit(0);
+//        }
+//
+//    }
 //    public String getUser_Email() {
 //        return user_Email;
 //    }

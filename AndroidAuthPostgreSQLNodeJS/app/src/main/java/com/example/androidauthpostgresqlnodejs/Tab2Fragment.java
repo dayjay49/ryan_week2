@@ -98,7 +98,7 @@ public class Tab2Fragment extends Fragment {
 //                contactDataList.remove(position);
 //                adapter.notifyDataSetChanged();
 //                onResume();
-                String number_to_delete = contactDataList.get(position).getPhone_number();
+                final String number_to_delete = contactDataList.get(position).getPhone_number();
                 adapter.deleteItem(position);
                 adapter.notifyItemRemoved(position);
                 adapter.notifyItemRangeChanged(position, adapter.getItemCount());
@@ -115,7 +115,7 @@ public class Tab2Fragment extends Fragment {
 
                     @Override
                     public void onSuccess(int code, Object receivedData) {
-                        Toast.makeText(getActivity(), receivedData.toString(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Contact removed from user", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override

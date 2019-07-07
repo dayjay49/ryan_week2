@@ -25,7 +25,7 @@ public interface RetroBaseApiService {
 
     // request Strings, response User
     @POST("login")
-    Call<Object> loginUser(@Body Object user);
+    Call<List<User>> loginUser(@Body User user);
 
     @GET("contacts/{email}")
     Call<List<Contact_Data>> loadContacts(@Path("email") String email);
@@ -44,5 +44,4 @@ public interface RetroBaseApiService {
     @FormUrlEncoded
     Call<String> deleteContact(@Field("email") String email,
                                @Field("phone_number") String phone_number);
-
 }
