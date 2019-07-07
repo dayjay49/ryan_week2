@@ -15,13 +15,13 @@
         android:id="@+id/full_image_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="centerCrop" />
-    <Button
-        android:id="@+id/close_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="@color/colortext1"
-        android:text="CLOSE" />
+        android:scaleType="fitCenter" />
+    <!--<Button-->
+        <!--android:id="@+id/close_button"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:background="@color/colortext1"-->
+        <!--android:text="CLOSE" />-->
 
 </RelativeLayout>

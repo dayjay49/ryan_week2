@@ -4,7 +4,7 @@
     <color name="colorPrimaryDark">#83C5EE</color>
     <color name="colorAccent">#FCCE40</color>
     <color name="myTextColor">#AFAFAF</color>
-    <color name="myDarkerGray">#525151</color>
+    <color name="myDarkerGray">#5E5D5D</color>
     <color name="colorButton1">#555556</color>
     <color name="colortext1">#BFA98B</color>
     <color name="pokerBackground">#4A833F</color>
@@ -12,6 +12,6 @@
     <color name="avobg">#99C9C3</color>
     <color name="avotext">#845716</color>
     <color name="colortext2">#ECE6DB</color>
-    <!--<color name="createcolor">#000000</color>-->
+    <color name="ryancolor">#F4A625</color>
 
 </resources>

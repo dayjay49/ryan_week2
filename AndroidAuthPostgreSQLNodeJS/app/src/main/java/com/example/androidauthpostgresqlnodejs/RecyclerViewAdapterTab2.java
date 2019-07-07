@@ -23,11 +23,12 @@ public class RecyclerViewAdapterTab2 extends RecyclerView.Adapter<RecyclerViewAd
 
     private Context mContext;
     private ArrayList<Bitmap> mData;
-    private static Application instance;
+    private ArrayList<String> mPath;
 
-    public RecyclerViewAdapterTab2(Context mContext, ArrayList<Bitmap> mData) {
+    public RecyclerViewAdapterTab2(Context mContext, ArrayList<String> mPath ,ArrayList<Bitmap> mData) {
         this.mContext = mContext;
         this.mData = mData;
+        this.mPath = mPath;
     }
 
     public interface OnItemClickListener{
@@ -58,7 +59,7 @@ public class RecyclerViewAdapterTab2 extends RecyclerView.Adapter<RecyclerViewAd
             public void onClick(View view) {
                 Intent intent = new Intent(mContext, FullImageActivity.class);
 
-                intent.putExtra("photo", mData.get(position));
+                intent.putExtra("path", mPath.get(position));
                 view.getContext().startActivity(intent);
             }
         });
