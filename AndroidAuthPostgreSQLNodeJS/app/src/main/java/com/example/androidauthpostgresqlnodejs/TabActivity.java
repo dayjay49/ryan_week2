@@ -54,7 +54,7 @@ public class TabActivity extends AppCompatActivity {
     public void onBackPressed() {
         new AlertDialog.Builder(this)
                 .setTitle("LOG OUT")
-                .setMessage("Are you sure you want to logout from this amazing app?")
+                .setMessage("Are you sure you want to logout?")
                 .setNegativeButton(android.R.string.no, null)
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
 
