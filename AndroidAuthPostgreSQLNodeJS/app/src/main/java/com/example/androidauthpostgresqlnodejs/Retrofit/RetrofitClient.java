@@ -1,6 +1,7 @@
 package com.example.androidauthpostgresqlnodejs.Retrofit;
 
 import android.content.Context;
+import android.net.Uri;
 
 import com.example.androidauthpostgresqlnodejs.Contact_Data;
 import com.example.androidauthpostgresqlnodejs.User;
@@ -12,6 +13,10 @@ import org.json.JSONArray;
 
 import java.util.List;
 
+import okhttp3.MultipartBody;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -173,5 +178,22 @@ public class RetrofitClient {
         });
     }
 
+    public void uploadPhoto(MultipartBody.Part imageFile, RequestBody user, RequestBody photo_id, final RetroCallback callback) {
+        apiService.uploadPhoto(imageFile, user, photo_id).enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (!response.isSuccessful()) {
+                    callback.onFailure(response.code());
+                } else {
+                    callback.onSuccess(response.code(), response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                callback.onError(t);
+            }
+        });
+    }
 }
 

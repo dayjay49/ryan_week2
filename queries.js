@@ -87,7 +87,13 @@ const loginUser = (req, res) => {
     if (error) {
       throw error
     }
-    res.status(200).json(results.rows)
+    if (results.length == 0) {
+      console.log('No matching email and password found.')
+    }
+    else{
+      res.status(200).json(results.rows)
+      console.log('Login successful.')
+    }
   })
 }
 
@@ -101,6 +107,7 @@ const getContactsByUser = (req, res) => {
       throw error
     }
     res.status(200).json(results.rows)
+    console.log('Contacts for logged in user loaded.')
   })
 }
 
@@ -129,6 +136,7 @@ const updateUserContacts = (req, res) => {
         throw error
       }
       res.status(200).send("Updated contacts for current user!")
+      console.log('New contact added for user')
     }
   )
 }
@@ -142,6 +150,7 @@ const deleteContact = (req, res) => {
       throw error
     }
     res.status(200).send(`Contact with number: ${phone_number}, is removed.`)
+    console.log(`Contact with phone number: ${phone_number} deleted.`)
   })
 }
 
