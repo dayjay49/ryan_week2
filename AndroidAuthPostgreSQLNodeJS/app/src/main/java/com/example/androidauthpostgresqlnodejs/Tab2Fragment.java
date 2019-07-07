@@ -45,7 +45,7 @@ public class Tab2Fragment extends Fragment {
     //for ArrayList
     TextView personName, personNumber, tvData;
     CircleImageView photo;
-    RetrofitClient retrofitClient;
+    //RetrofitClient retrofitClient;
 
     public ArrayList<Contact_Data> contactDataList = new ArrayList<>();
 
@@ -100,6 +100,7 @@ public class Tab2Fragment extends Fragment {
                 adapter.notifyItemRemoved(position);
                 adapter.notifyItemRangeChanged(position, adapter.getItemCount());
 //                contactDataList.remove(position);
+
                 //Initialize Service
                 final RetrofitClient retrofitClient;
                 retrofitClient = RetrofitClient.getInstance(getContext()).createBaseApi();

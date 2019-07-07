@@ -49,8 +49,12 @@ public interface RetroBaseApiService {
 
     // Tab 2 Gallery API
     @Multipart
-    @POST("upload")
-    Call<ResponseBody> uploadPhoto(@Part("photo") MultipartBody.Part imageFile,
-                                   @Part("user") RequestBody user,
-                                   @Part("photo_id") RequestBody photo_id);
+    @POST("gallery")
+    Call<ResponseBody> loadGallery();
+
+    @Multipart
+    @POST("gallery/add")
+    Call<ResponseBody> uploadPhoto(@Part MultipartBody.Part imageFile,
+                                   @Part("user_email") RequestBody user_email,
+                                   @Part("image_id") RequestBody image_id);
 }

@@ -178,8 +178,8 @@ public class RetrofitClient {
         });
     }
 
-    public void uploadPhoto(MultipartBody.Part imageFile, RequestBody user, RequestBody photo_id, final RetroCallback callback) {
-        apiService.uploadPhoto(imageFile, user, photo_id).enqueue(new Callback<ResponseBody>() {
+    public void uploadPhoto(MultipartBody.Part imageFile, RequestBody user_email, RequestBody image_id, final RetroCallback callback) {
+        apiService.uploadPhoto(imageFile, user_email, image_id).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (!response.isSuccessful()) {
@@ -188,7 +188,6 @@ public class RetrofitClient {
                     callback.onSuccess(response.code(), response.body());
                 }
             }
-
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 callback.onError(t);
