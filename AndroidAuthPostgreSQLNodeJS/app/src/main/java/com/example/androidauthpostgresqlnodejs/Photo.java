@@ -1,20 +1,14 @@
 package com.example.androidauthpostgresqlnodejs;
 
 public class Photo {
-    private String mPath;
-    private int mId;
-    private int count = 0;
+    private String path;
 
     public Photo(String mPath) {
-        this.mPath = mPath;
-        this.mId = count++;
+        this.path = mPath;
     }
 
     public String getmPath() {
-        return mPath;
+        return path;
     }
 
-    public String getmIdString(){
-        return String.valueOf(mId);
-    }
 }

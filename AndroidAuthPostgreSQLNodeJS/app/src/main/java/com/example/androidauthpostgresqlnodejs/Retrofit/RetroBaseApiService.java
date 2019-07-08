@@ -1,6 +1,7 @@
 package com.example.androidauthpostgresqlnodejs.Retrofit;
 
 import com.example.androidauthpostgresqlnodejs.Contact_Data;
+import com.example.androidauthpostgresqlnodejs.Photo;
 import com.example.androidauthpostgresqlnodejs.User;
 import com.google.gson.JsonArray;
 
@@ -49,9 +50,8 @@ public interface RetroBaseApiService {
                                @Field("phone_number") String phone_number);
 
     // Tab 2 Gallery API
-    @Multipart
     @GET("gallery/{email}")
-    Call<List<String>> loadGallery(@Path("email") String email);
+    Call<List<Photo>> loadGallery(@Path("email") String email);
 
     @Multipart
     @POST("gallery/add")

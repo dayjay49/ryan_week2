@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 
 import com.example.androidauthpostgresqlnodejs.Contact_Data;
+import com.example.androidauthpostgresqlnodejs.Photo;
 import com.example.androidauthpostgresqlnodejs.User;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -179,9 +180,9 @@ public class RetrofitClient {
     }
 
     public void loadGallery(String email, final RetroCallback callback) {
-        apiService.loadGallery(email).enqueue(new Callback<List<String>>() {
+        apiService.loadGallery(email).enqueue(new Callback<List<Photo>>() {
             @Override
-            public void onResponse(Call<List<String>> call, Response<List<String>> response) {
+            public void onResponse(Call<List<Photo>> call, Response<List<Photo>> response) {
                 if (!response.isSuccessful()) {
                     callback.onFailure(response.code());
                 } else {
@@ -190,7 +191,7 @@ public class RetrofitClient {
             }
 
             @Override
-            public void onFailure(Call<List<String>> call, Throwable t) {
+            public void onFailure(Call<List<Photo>> call, Throwable t) {
                 callback.onError(t);
             }
         });

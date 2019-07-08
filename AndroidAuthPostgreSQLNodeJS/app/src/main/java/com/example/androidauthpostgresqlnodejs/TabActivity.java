@@ -16,6 +16,8 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
 
 
+import com.example.androidauthpostgresqlnodejs.Retrofit.RetroCallback;
+import com.example.androidauthpostgresqlnodejs.Retrofit.RetrofitClient;
 import com.example.androidauthpostgresqlnodejs.main.SectionsPagerAdapter;
 import com.google.android.material.tabs.TabLayout;
 
@@ -30,6 +32,8 @@ public class TabActivity extends AppCompatActivity {
 //            Manifest.permission.INTERNET
     };
 
+    String user_Email = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,7 +41,9 @@ public class TabActivity extends AppCompatActivity {
 //        Toolbar toolbar = findViewById(R.id.toolbar);
 //        setSupportActionBar(toolbar);
         //checkPermission();
+        user_Email = MainActivity.login_user.getEmail();
         initialize();
+
     }
 
     public void initialize() {
@@ -48,6 +54,30 @@ public class TabActivity extends AppCompatActivity {
         //Log.d("TAG2", viewPager.toString());
         TabLayout tabs = findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
+
+        final RetrofitClient retrofitClient;
+        retrofitClient = RetrofitClient.getInstance(this).createBaseApi();
+
+        retrofitClient.loadGallery(user_Email, new RetroCallback() {
+            @Override
+            public void onError(Throwable t) {
+                Toast.makeText(TabActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onSuccess(int code, Object receivedData) {
+
+                List<Photo> serverPathList = (List<Photo>) receivedData;
+
+
+            }
+
+            @Override
+            public void onFailure(int code) {
+                Toast.makeText(TabActivity.this, "Code: " + code, Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 
     @Override

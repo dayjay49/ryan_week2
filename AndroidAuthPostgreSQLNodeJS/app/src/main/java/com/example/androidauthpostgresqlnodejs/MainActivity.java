@@ -156,8 +156,6 @@ public class MainActivity extends AppCompatActivity {
                             Toast.makeText(MainActivity.this, "Wrong email and/or password. Please enter valid email and password." , Toast.LENGTH_SHORT).show();
                         }
                         else {
-                            Toast.makeText(MainActivity.this, "Login successful!", Toast.LENGTH_SHORT).show();
-
                             retrofitClient.loadContacts(login_user.getEmail(), new RetroCallback() {
                                 @Override
                                 public void onError(Throwable t) {
@@ -166,33 +164,12 @@ public class MainActivity extends AppCompatActivity {
 
                                 @Override
                                 public void onSuccess(int code, Object receivedData) {
-                                    Toast.makeText(MainActivity.this, "Contacts loaded for logged user", Toast.LENGTH_SHORT).show();
                                     contactList = (List<Contact_Data>) receivedData;
                                     user_Email = login_user.getEmail();
-
-                                    retrofitClient.loadGallery(user_Email, new RetroCallback() {
-                                        @Override
-                                        public void onError(Throwable t) {
-                                            Toast.makeText(MainActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
-                                        }
-
-                                        @Override
-                                        public void onSuccess(int code, Object receivedData) {
-
-
-
-                                            Toast.makeText(MainActivity.this, "Gallery loaded for logged user", Toast.LENGTH_SHORT).show();
-                                            // received Contact_Data connect with Intent
-                                            Intent intent = new Intent(MainActivity.this, TabActivity.class);
+                                    // received Contact_Data connect with Intent
+                                    Intent intent = new Intent(MainActivity.this, TabActivity.class);
 //                                          intent.putExtra("user_Email", edt_login_email.getText().toString());
-                                            startActivity(intent);                  //Open tabbed activity
-                                        }
-
-                                        @Override
-                                        public void onFailure(int code) {
-                                            Toast.makeText(MainActivity.this, "Code: " + code, Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
+                                    startActivity(intent);                  //Open tabbed activity
                                 }
 
                                 @Override

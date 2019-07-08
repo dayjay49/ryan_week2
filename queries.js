@@ -50,7 +50,7 @@ const getContactsByUser = (req, res) => {
       throw error
     }
     res.status(200).json(results.rows)
-    console.log('Contacts for logged in user loaded.')
+    console.log('Contacts loaded for logged-in user.')
   })
 }
 
@@ -107,7 +107,8 @@ const loadGallery = (req, res) => {
     if (error) {
       throw error
     }
-    res.status(200).
+    res.status(200).json(results.rows)
+    console.log('Gallery successfully loaded for logged-in user.')
   })
 }
 
