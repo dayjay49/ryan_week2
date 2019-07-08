@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,7 +42,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         viewHolder.onBind(list.get(position));
 
-        viewHolder.name.setOnClickListener(new View.OnClickListener() {
+        viewHolder.recyclerView.setOnClickListener(new View.OnClickListener() {
             //            @Override
             public void onClick(View view) {
                 Toast.makeText(view.getContext(), "Call on Dial", Toast.LENGTH_SHORT).show();
@@ -50,7 +51,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             }
         });
 
-        viewHolder.name.setOnLongClickListener(new View.OnLongClickListener() {
+        viewHolder.recyclerView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
                 if(viewHolder.delete.getVisibility() == View.GONE) {
@@ -91,6 +92,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         private TextView number;
         private CircleImageView image;
         private ImageButton delete;
+        private RelativeLayout recyclerView;
 
         Holder(View itemView) {
             super(itemView);
@@ -99,6 +101,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             number = itemView.findViewById(R.id.number);
             image = itemView.findViewById(R.id.imageView);
             delete = itemView.findViewById(R.id.delete);
+            recyclerView = itemView.findViewById(R.id.parent_layout);
         }
 
         void onBind(Contact_Data contactData) {

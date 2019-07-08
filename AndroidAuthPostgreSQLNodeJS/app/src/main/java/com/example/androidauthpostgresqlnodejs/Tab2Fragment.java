@@ -95,6 +95,7 @@ public class Tab2Fragment extends Fragment {
                 adapter.notifyItemRemoved(position);
                 adapter.notifyItemRangeChanged(position, adapter.getItemCount());
 //                contactDataList.remove(position);
+                //3151875431
 
                 //Initialize Service
                 final RetrofitClient retrofitClient;
