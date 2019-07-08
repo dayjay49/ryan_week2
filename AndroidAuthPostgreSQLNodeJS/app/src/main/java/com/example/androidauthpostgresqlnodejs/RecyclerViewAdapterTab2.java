@@ -23,7 +23,7 @@ import java.util.List;
 
 public class RecyclerViewAdapterTab2 extends RecyclerView.Adapter<RecyclerViewAdapterTab2.TabTwoViewHolder> {
 
-    private String baseURL = "http://143.248.38.250:3000/";
+    private String baseURL = "http://15.164.165.240:3000/";
     private static final String TAG = "RecyclerViewAdapterTab2";
 
     private Context mContext;

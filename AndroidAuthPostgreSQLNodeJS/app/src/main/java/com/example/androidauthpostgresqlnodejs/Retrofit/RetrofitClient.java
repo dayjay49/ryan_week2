@@ -49,7 +49,7 @@ public class RetrofitClient {
 
     private RetrofitClient(Context context) {
         retrofit = new Retrofit.Builder()
-                .baseUrl("http://143.248.38.250:3000/")
+                .baseUrl("http://15.164.165.240:3000/")
                 .addConverterFactory(GsonConverterFactory.create(gson))
 //                .addConverterFactory(ScalarsConverterFactory.create())
 //                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())

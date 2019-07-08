@@ -18,7 +18,7 @@ public class Splash extends Activity {
 
         ImageView avo = (ImageView) findViewById(R.id.gif_image);
         //GlideDrawableImageViewTarget gifImage = new GlideDrawableImageViewTarget(rabbit);
-        Glide.with(this).load(R.drawable.avocagif1).into(avo);
+        Glide.with(this).load(R.drawable.ryandancing).into(avo);
 
         Handler hd = new Handler();
         hd.postDelayed(new splashhandler(), 1500); // 1초 후에 hd handler 실행  3000ms = 3초

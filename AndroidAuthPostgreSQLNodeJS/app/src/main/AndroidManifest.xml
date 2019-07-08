@@ -3,17 +3,17 @@
     package="com.example.androidauthpostgresqlnodejs" >
 
     <application
-        android:usesCleartextTraffic="true"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/ic_launcher_ryan"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/ic_launcher_ryan_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme" >
         <activity android:name=".TabActivity"/>
         <activity android:name=".AddContact"/>
         <activity android:name=".FullImageActivity"/>
-        <activity android:name=".MainActivity" >
+        <activity android:name=".MainActivity"/>
+        <activity android:name=".Splash" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

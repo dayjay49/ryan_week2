@@ -65,6 +65,7 @@ public class TabActivity extends AppCompatActivity {
                 Toast.makeText(TabActivity.this, "Code: " + code, Toast.LENGTH_SHORT).show();
             }
         });
+        initialize();
     }
 
     public void initialize() {

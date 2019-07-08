@@ -59,11 +59,11 @@ public class AddContact extends AppCompatActivity implements View.OnClickListene
 
         contactsave.setOnClickListener(new View.OnClickListener(){
             @Override
-            public void onClick(View v){
+            public void onClick(View v) {
                 final String addedname;
                 final String addednumber;
-                addname.setInputType ( InputType. TYPE_TEXT_FLAG_NO_SUGGESTIONS );
-                addnumber.setInputType ( InputType. TYPE_TEXT_FLAG_NO_SUGGESTIONS );
+                addname.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+                addnumber.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
                 addedname = addname.getText().toString();
                 addednumber = addnumber.getText().toString();
 
@@ -78,52 +78,58 @@ public class AddContact extends AppCompatActivity implements View.OnClickListene
                 }
 
                 boolean number_exists = false;
-                for (int i = 0; i < MainActivity.contactList.size(); i++) {
-                    if (Integer.parseInt(MainActivity.contactList.get(i).getPhone_number()) == Integer.parseInt(addednumber)) {
-                        number_exists = true;
+                try {
+                    for (int i = 0; i < MainActivity.contactList.size(); i++) {
+                        if (Integer.parseInt(MainActivity.contactList.get(i).getPhone_number()) == Integer.parseInt(addednumber)) {
+                            number_exists = true;
+                            break;
+                        }
                     }
-                }
 
-                if (number_exists == false) {
-                    retrofitClient.addContact(addednumber, addedname, new RetroCallback() {
-                        @Override
-                        public void onError(Throwable t) {
-                            Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_SHORT).show();
-                        }
+                    if (number_exists == false) {
+                        retrofitClient.addContact(addednumber, addedname, new RetroCallback() {
+                            @Override
+                            public void onError(Throwable t) {
+                                Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
 
-                        @Override
-                        public void onSuccess(int code, Object receivedData) {
+                            @Override
+                            public void onSuccess(int code, Object receivedData) {
 
-                            retrofitClient.updateUserContacts(user_Email, addednumber, new RetroCallback() {
-                                @Override
-                                public void onError(Throwable t) {
-                                    Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_SHORT).show();
-                                }
+                                retrofitClient.updateUserContacts(user_Email, addednumber, new RetroCallback() {
+                                    @Override
+                                    public void onError(Throwable t) {
+                                        Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_SHORT).show();
+                                    }
 
-                                @Override
-                                public void onSuccess(int code, Object receivedData) {
-                                    Toast.makeText(getApplicationContext(), "New contact added!", Toast.LENGTH_SHORT).show();
-                                    contact.putExtra("str_name", addedname);
-                                    contact.putExtra("str_number", addednumber);
-                                    setResult(RESULT_OK, contact);
-                                    finish();
-                                }
+                                    @Override
+                                    public void onSuccess(int code, Object receivedData) {
+                                        Toast.makeText(getApplicationContext(), "New contact added!", Toast.LENGTH_SHORT).show();
+                                        contact.putExtra("str_name", addedname);
+                                        contact.putExtra("str_number", addednumber);
+                                        setResult(RESULT_OK, contact);
+                                        finish();
+                                    }
 
-                                @Override
-                                public void onFailure(int code) {
-                                    Toast.makeText(getApplicationContext(), "Code: " + code, Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                        }
-                        @Override
-                        public void onFailure(int code) {
-                            Toast.makeText(getApplicationContext(), "Code: " + code, Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                } else {
-                    Toast.makeText(getApplicationContext(), "Contact with " + addednumber + "already exists.", Toast.LENGTH_SHORT).show();
-                }
+                                    @Override
+                                    public void onFailure(int code) {
+                                        Toast.makeText(getApplicationContext(), "Code: " + code, Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                            }
+
+                            @Override
+                            public void onFailure(int code) {
+                                Toast.makeText(getApplicationContext(), "Code: " + code, Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Contact with " + addednumber + "already exists.", Toast.LENGTH_SHORT).show();
+                    }
 //                finish();
+                } catch (Exception e) {
+                    Toast.makeText(getApplicationContext(), "Please enter proper phone number", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
@@ -152,7 +158,7 @@ public class AddContact extends AppCompatActivity implements View.OnClickListene
                     break;
             }
         } catch (Exception e) {
-            Toast.makeText(this, "Oops! 로딩에 오류가 있습니다.", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "아직 준비가 안됐어요~.", Toast.LENGTH_LONG).show();
             e.printStackTrace();
         }
     }

@@ -20,8 +20,9 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:textSize="30sp"
-        android:textColor="@color/avotext"
-        android:text="AVOCADO" />
+        android:textColor="@color/ryancolor"
+        android:text="MAKAO FRIENDS"
+        android:textStyle="bold"/>
 
 
 </LinearLayout>

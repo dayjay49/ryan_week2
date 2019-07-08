@@ -78,9 +78,9 @@ public class Tab2Fragment extends Fragment {
         /////////////////////////////////////////////////////////////////////////////
         //Get contacts from JSONArray and add it into adpater.
         ///////////////////////////////////////////////////////////////////////////
-        final List<Contact_Data> contactDataList = MainActivity.contactList;
-        for (int i = 0; i < contactDataList.size(); i++) {
-            adapter.addItem(contactDataList.get(i));
+//        final List<Contact_Data> contactDataList = MainActivity.contactList;
+        for (int i = 0; i < MainActivity.contactList.size(); i++) {
+            adapter.addItem(MainActivity.contactList.get(i));
         }
 
         //////////////////////////////////////////////////////////////////////////////////////
@@ -90,7 +90,7 @@ public class Tab2Fragment extends Fragment {
             @Override
             public void onItemClick(View v, int position, int request_code) {
 
-                final String number_to_delete = contactDataList.get(position).getPhone_number();
+                final String number_to_delete = MainActivity.contactList.get(position).getPhone_number();
                 adapter.deleteItem(position);
                 adapter.notifyItemRemoved(position);
                 adapter.notifyItemRangeChanged(position, adapter.getItemCount());
@@ -164,7 +164,7 @@ public class Tab2Fragment extends Fragment {
                     Contact_Data contactData = new Contact_Data();
                     contactData.setContact_name(str_name);
                     contactData.setPhone_number(str_number);
-                    contactDataList.add(contactData);
+                    MainActivity.contactList.add(contactData);
                     adapter.addItem(contactData);
                     adapter.notifyDataSetChanged();
                 }

@@ -19,7 +19,7 @@ import java.io.File;
 
 public class FullImageActivity extends AppCompatActivity {
 
-    private String baseURL = "http://143.248.38.250:3000/";
+    private String baseURL = "http://15.164.165.240:3000/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

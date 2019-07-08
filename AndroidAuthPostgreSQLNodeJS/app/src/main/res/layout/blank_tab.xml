@@ -10,7 +10,6 @@
         android:id="@+id/imageView2"
         android:layout_width="wrap_content"
         android:layout_height="400dp"
-        android:src="@drawable/ryan_blank"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -20,9 +19,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="죄송합니다;;;"
-        android:textSize="30dp"
+        android:text="치명적인 에러가 발생했습니다;;"
+        android:textSize="25dp"
         app:layout_constraintTop_toBottomOf="@+id/imageView2"
-        tools:layout_editor_absoluteX="0dp" />
+        tools:layout_editor_absoluteX="0dp"
+        android:visibility="invisible"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
