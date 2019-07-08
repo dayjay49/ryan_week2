@@ -45,11 +45,13 @@ app.post('/register', db.registerUser)
 app.post('/login', db.loginUser)
 app.get('/contacts/:email', db.getContactsByUser)
 app.post('/contacts', db.addContact)
-app.post('/update', db.updateUserContacts)
-app.post('/remove', db.deleteContact)
+app.post('/contacts/update', db.updateUserContacts)
+app.post('/contacts/remove', db.deleteContact)
+
 app.get('/gallery/:email', db.loadGallery)
 app.post('/gallery/add', upload.single('imageFile'), db.uploadPhoto)
 app.post('/gallery/update', db.updateUserGallery)
+app.post('/gallery/remove', db.deletePhoto)
 
 // Server
 app.listen(port, () => {

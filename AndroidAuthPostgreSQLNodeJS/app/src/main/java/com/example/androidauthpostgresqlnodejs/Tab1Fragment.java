@@ -51,8 +51,8 @@ public class Tab1Fragment extends Fragment {
     public static final int TAKE_PICTURE = 1888;
 
     public View view;
-    public ArrayList<Bitmap> Gallery = new ArrayList<>();
-    public ArrayList<String> path_Gallery = new ArrayList<>();
+//    public ArrayList<Bitmap> Gallery = new ArrayList<>();
+//    public ArrayList<String> path_Gallery = new ArrayList<>();
 //    public ArrayList<Photo> photo_Gallery = new ArrayList<>();
     public Uri mImageUri;
     public String user_Email;
@@ -87,18 +87,13 @@ public class Tab1Fragment extends Fragment {
 
         adapterTab2.setOnItemClickListener(new RecyclerViewAdapterTab2.OnItemClickListener() {
             @Override
-            public void onItemClick(View v, int position, int request_code) {
-
-
-//                final Bitmap photo_to_delete = Gallery.get(position);
-//                Gallery.remove(position);
+            public void onItemClick(View v, final int position, int request_code) {
 
                 //////////////////////////////////////////////////////////////
                 final RetrofitClient retrofitClient;
                 retrofitClient = RetrofitClient.getInstance(getContext()).createBaseApi();
-                final String file_to_delete = serverPathList.get(position).getPath().replace("my_uploads\\","");
-
-                serverPathList.remove(position);
+                String dummy = serverPathList.get(position).getPath().replace("my_uploads","");
+                final String file_to_delete = dummy.substring(1);
 
                 retrofitClient.deletePhoto(user_Email, file_to_delete, new RetroCallback() {
                     @Override
@@ -109,8 +104,8 @@ public class Tab1Fragment extends Fragment {
                     @Override
                     public void onSuccess(int code, Object receivedData) {
                         Toast.makeText(getActivity(), "Chosen image deleted...", Toast.LENGTH_SHORT).show();
+                        serverPathList.remove(position);
                         initializeRecyclerView();
-
                     }
 
                     @Override
@@ -118,8 +113,6 @@ public class Tab1Fragment extends Fragment {
                         Toast.makeText(getActivity(), "Code: " + code, Toast.LENGTH_SHORT).show();
                     }
                 });
-                //////////////////////////////////////////////////////////////
-
 
             }
         });
@@ -208,8 +201,25 @@ public class Tab1Fragment extends Fragment {
 
                                     @Override
                                     public void onSuccess(int code, Object receivedData) {
-                                        Toast.makeText(getActivity(), "Uploaded photo taken.", Toast.LENGTH_SHORT).show();
-                                        initializeRecyclerView();
+
+                                        retrofitClient.loadGallery(user_Email, new RetroCallback() {
+                                            @Override
+                                            public void onError(Throwable t) {
+                                                Toast.makeText(getActivity(), t.getMessage(), Toast.LENGTH_SHORT).show();
+                                            }
+
+                                            @Override
+                                            public void onSuccess(int code, Object receivedData) {
+                                                Toast.makeText(getActivity(), "Uploaded photo taken.", Toast.LENGTH_SHORT).show();
+                                                serverPathList = (List<Photo>) receivedData;
+                                                initializeRecyclerView();
+                                            }
+
+                                            @Override
+                                            public void onFailure(int code) {
+                                                Toast.makeText(getActivity(), "Code: " + code, Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
                                     }
 
                                     @Override

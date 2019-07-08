@@ -45,18 +45,6 @@ public class TabActivity extends AppCompatActivity {
 //        setSupportActionBar(toolbar);
         //checkPermission();
         user_Email = MainActivity.login_user.getEmail();
-        initialize();
-
-    }
-
-    public void initialize() {
-        SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
-        ViewPager viewPager = findViewById(R.id.view_pager);
-        //Log.d("TAG1", viewPager.toString());
-        viewPager.setAdapter(sectionsPagerAdapter);
-        //Log.d("TAG2", viewPager.toString());
-        TabLayout tabs = findViewById(R.id.tabs);
-        tabs.setupWithViewPager(viewPager);
 
         final RetrofitClient retrofitClient;
         retrofitClient = RetrofitClient.getInstance(this).createBaseApi();
@@ -69,10 +57,7 @@ public class TabActivity extends AppCompatActivity {
 
             @Override
             public void onSuccess(int code, Object receivedData) {
-
                 serverPathList = (List<Photo>) receivedData;
-
-
             }
 
             @Override
@@ -80,7 +65,17 @@ public class TabActivity extends AppCompatActivity {
                 Toast.makeText(TabActivity.this, "Code: " + code, Toast.LENGTH_SHORT).show();
             }
         });
+        initialize();
+    }
 
+    public void initialize() {
+        SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
+        ViewPager viewPager = findViewById(R.id.view_pager);
+        //Log.d("TAG1", viewPager.toString());
+        viewPager.setAdapter(sectionsPagerAdapter);
+        //Log.d("TAG2", viewPager.toString());
+        TabLayout tabs = findViewById(R.id.tabs);
+        tabs.setupWithViewPager(viewPager);
     }
 
     @Override

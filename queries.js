@@ -135,6 +135,7 @@ const uploadPhoto = (req, res) => {
       throw error
     }
     res.status(201).send(`${filename}`)
+    console.log('Photo upload successful.')
   })
 }
 
