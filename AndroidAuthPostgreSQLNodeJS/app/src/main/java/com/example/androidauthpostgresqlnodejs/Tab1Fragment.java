@@ -86,11 +86,30 @@ public class Tab1Fragment extends Fragment {
             @Override
             public void onItemClick(View v, int position, int request_code) {
 
-                final Bitmap photo_to_delete = Gallery.get(position);
-                Gallery.remove(position);
+//                final Bitmap photo_to_delete = Gallery.get(position);
+//                Gallery.remove(position);
 
                 //////////////////////////////////////////////////////////////
-                //      Retrofit //
+                final RetrofitClient retrofitClient;
+                retrofitClient = RetrofitClient.getInstance(getContext()).createBaseApi();
+                final String file_to_delete = serverPathList.get(position).getPath().replace("my_uploads","");
+
+                retrofitClient.deletePhoto(user_Email, file_to_delete, new RetroCallback() {
+                    @Override
+                    public void onError(Throwable t) {
+                        Toast.makeText(getActivity(), t.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onSuccess(int code, Object receivedData) {
+
+                    }
+
+                    @Override
+                    public void onFailure(int code) {
+                        Toast.makeText(getActivity(), "Code: " + code, Toast.LENGTH_SHORT).show();
+                    }
+                });
                 //////////////////////////////////////////////////////////////
                 initializeRecyclerView(Gallery);
 

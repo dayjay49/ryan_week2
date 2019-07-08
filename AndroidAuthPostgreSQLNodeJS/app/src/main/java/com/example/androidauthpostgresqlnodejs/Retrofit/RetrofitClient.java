@@ -230,5 +230,23 @@ public class RetrofitClient {
             }
         });
     }
+
+    public void deletePhoto(String email, String filename, final RetroCallback callback) {
+        apiService.deletePhoto(email, filename).enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                if (!response.isSuccessful()) {
+                    callback.onFailure(response.code());
+                } else {
+                    callback.onSuccess(response.code(), response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                callback.onError(t);
+            }
+        });
+    }
 }
 

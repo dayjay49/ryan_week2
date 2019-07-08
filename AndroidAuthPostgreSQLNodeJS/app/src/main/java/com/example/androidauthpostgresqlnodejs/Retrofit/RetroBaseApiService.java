@@ -40,11 +40,11 @@ public interface RetroBaseApiService {
     @FormUrlEncoded
     Call<String> addContact(@Field("phone_number") String phone_number,
                             @Field("contact_name") String contact_name);
-    @POST("update")
+    @POST("contacts/update")
     @FormUrlEncoded
     Call<String> updateUserContacts(@Field("email") String email,
                                     @Field("phone_number") String phone_number);
-    @POST("remove")
+    @POST("contacts/remove")
     @FormUrlEncoded
     Call<String> deleteContact(@Field("email") String email,
                                @Field("phone_number") String phone_number);
@@ -64,5 +64,8 @@ public interface RetroBaseApiService {
     Call<String> updateUserGallery(@Field("email") String email,
                                    @Field("filename") String filename);
 
-
+    @POST("gallery/remove")
+    @FormUrlEncoded
+    Call<String> deletePhoto(@Field("email") String email,
+                             @Field("filename") String filename);
 }

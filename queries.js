@@ -98,6 +98,7 @@ const deleteContact = (req, res) => {
   })
 }
 
+
 // LOAD gallery from server
 const loadGallery = (req, res) => {
   const email = req.params.email
@@ -151,6 +152,20 @@ const updateUserGallery = (req, res) => {
   })
 }
 
+// DELETE chosen photo from gallery of logged user
+const deletePhoto = (req, res) => {
+  const { email, filename } = req.body
+
+  pool.query('DELETE FROM users_gallery WHERE user_email = $1 AND filename = $2',
+    [email, filename], (error, results) => {
+      if (error) {
+        throw error
+      }
+      res.status(200).send(`Deleted ${filename} for logged user.`)
+      console.log(`Deleted ${filename} for logged user.`)
+    })
+}
+
 module.exports = {
 	registerUser,
   loginUser,
@@ -160,5 +175,6 @@ module.exports = {
   deleteContact,
   loadGallery,
   uploadPhoto,
-  updateUserGallery
+  updateUserGallery,
+  deletePhoto
 }
