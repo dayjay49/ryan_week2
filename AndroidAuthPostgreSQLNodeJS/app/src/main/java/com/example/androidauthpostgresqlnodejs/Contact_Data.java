@@ -51,7 +51,7 @@ public class Contact_Data {
     public boolean equals(Object o) {
         if (o instanceof Contact_Data)
             return getPhNumberChanged().equals(((Contact_Data) o).getPhNumberChanged());
-        return false;
+        return false;e
     }
 
 }

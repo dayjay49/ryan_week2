@@ -82,8 +82,6 @@ public class RecyclerViewAdapterTab2 extends RecyclerView.Adapter<RecyclerViewAd
                             mListener.onItemClick(view, position, -1);
                             holder.photoDelete.setVisibility(View.GONE);
                         }
-
-
                     });
                 } else {
                     holder.photoDelete.setVisibility(View.GONE);
