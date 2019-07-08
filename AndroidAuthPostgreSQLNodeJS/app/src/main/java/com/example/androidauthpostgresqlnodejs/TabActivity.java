@@ -56,6 +56,7 @@ public class TabActivity extends AppCompatActivity {
                     String path = prePath+"/"+postPath;
                     Photo addPhoto = new Photo(path);
                     serverPathList.add(addPhoto);
+                    initialize();
                 }
             }
 
@@ -64,7 +65,6 @@ public class TabActivity extends AppCompatActivity {
                 Toast.makeText(TabActivity.this, "Code: " + code, Toast.LENGTH_SHORT).show();
             }
         });
-        initialize();
     }
 
     public void initialize() {
