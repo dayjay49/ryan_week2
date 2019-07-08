@@ -51,9 +51,6 @@ public class Tab1Fragment extends Fragment {
     public static final int TAKE_PICTURE = 1888;
 
     public View view;
-//    public ArrayList<Bitmap> Gallery = new ArrayList<>();
-//    public ArrayList<String> path_Gallery = new ArrayList<>();
-//    public ArrayList<Photo> photo_Gallery = new ArrayList<>();
     public Uri mImageUri;
     public String user_Email;
     public List<Photo> serverPathList;
@@ -105,7 +102,7 @@ public class Tab1Fragment extends Fragment {
                     public void onSuccess(int code, Object receivedData) {
                         Toast.makeText(getActivity(), "Chosen image deleted...", Toast.LENGTH_SHORT).show();
                         serverPathList.remove(position);
-                        initializeRecyclerView();
+                        initializeRecyclerView(serverPathList);
                     }
 
                     @Override
@@ -210,9 +207,18 @@ public class Tab1Fragment extends Fragment {
 
                                             @Override
                                             public void onSuccess(int code, Object receivedData) {
-                                                Toast.makeText(getActivity(), "Uploaded photo taken.", Toast.LENGTH_SHORT).show();
-                                                serverPathList = (List<Photo>) receivedData;
-                                                initializeRecyclerView();
+//                                                Toast.makeText(getActivity(), "HEHEHE.", Toast.LENGTH_SHORT).show();
+                                                serverPathList = new ArrayList<>();
+                                                ArrayList<Photo> tempPathList = (ArrayList<Photo>) receivedData;
+                                                for (int i = 0 ; i< tempPathList.size(); i++) {
+                                                    String prePath = "my_uploads";
+                                                    String postPath = tempPathList.get(i).getPath().substring(11);
+                                                    String path = prePath+"/"+postPath;
+                                                    Photo addPhoto = new Photo(path);
+                                                    serverPathList.add(addPhoto);
+                                                }
+                                                Toast.makeText(getActivity(), "HEHEHE.", Toast.LENGTH_SHORT).show();
+                                                initializeRecyclerView(serverPathList);
                                             }
 
                                             @Override
@@ -246,8 +252,6 @@ public class Tab1Fragment extends Fragment {
         }
     }
 
-
-
     public Bitmap rotateImage(Bitmap source, float angle) {
         Matrix matrix = new Matrix();
         matrix.postRotate(angle);
@@ -271,16 +275,11 @@ public class Tab1Fragment extends Fragment {
         }
     }
 
-
-
-
-    public void initializeRecyclerView() {
+    public void initializeRecyclerView(List<Photo> serverPathList) {
         RecyclerView recyclerViewtab2 = view.findViewById(R.id.recycler_view_tab2);
         RecyclerViewAdapterTab2 adapterTab2 = new RecyclerViewAdapterTab2(getActivity(), serverPathList);
         recyclerViewtab2.setAdapter(adapterTab2);
         recyclerViewtab2.setLayoutManager(new GridLayoutManager(getActivity(), 3));
     }
-
-
 
 }

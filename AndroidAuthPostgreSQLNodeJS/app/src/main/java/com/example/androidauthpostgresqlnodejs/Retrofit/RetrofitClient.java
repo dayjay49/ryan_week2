@@ -107,8 +107,8 @@ public class RetrofitClient {
         });
     }
     // GET
-    public void loadContacts(String email, final RetroCallback callback) {
-        Call<List<Contact_Data>> call = apiService.loadContacts(email);
+    public void loadContactsByUser(String email, final RetroCallback callback) {
+        Call<List<Contact_Data>> call = apiService.loadContactsByUser(email);
         call.enqueue(new Callback<List<Contact_Data>>() {
             @Override
             public void onResponse(Call<List<Contact_Data>> call, Response<List<Contact_Data>> response) {
@@ -142,6 +142,24 @@ public class RetrofitClient {
             }
         });
     }
+
+//    public void getContact(String phone_number, final RetroCallback callback) {
+//        apiService.getContact(phone_number).enqueue(new Callback<List<Contact_Data>>() {
+//            @Override
+//            public void onResponse(Call<List<Contact_Data>> call, Response<List<Contact_Data>> response) {
+//                if (!response.isSuccessful()) {
+//                    callback.onFailure(response.code());
+//                } else {
+//                    callback.onSuccess(response.code(), response.body());
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<List<Contact_Data>> call, Throwable t) {
+//                callback.onError(t);
+//            }
+//        });
+//    }
 
     public void updateUserContacts(String email, String phone_number, final RetroCallback callback) {
         Call<String> call = apiService.updateUserContacts(email, phone_number);

@@ -28,8 +28,6 @@ public class RecyclerViewAdapterTab2 extends RecyclerView.Adapter<RecyclerViewAd
 
     private Context mContext;
     private List<Photo> mData;
-    private ArrayList<String> mPath;
-
     public RecyclerViewAdapterTab2(Context mContext, List<Photo> mData) {
         this.mContext = mContext;
         this.mData = mData;
@@ -56,12 +54,11 @@ public class RecyclerViewAdapterTab2 extends RecyclerView.Adapter<RecyclerViewAd
 
     @Override
     public void onBindViewHolder(final TabTwoViewHolder holder, final int position) {
-//
-//        Bitmap bitmap = BitmapFactory.decodeFile(mData.get(position).getPath());
-//        holder.img_thumbnail.setImageBitmap(bitmap);
+
         String path = mData.get(position).getPath();
+        String real_URL = baseURL+path;
         Glide.with(mContext)
-                .load(baseURL+path)
+                .load(real_URL)
                 .into(holder.img_thumbnail);
 
         holder.cardView.setOnClickListener(new View.OnClickListener() {

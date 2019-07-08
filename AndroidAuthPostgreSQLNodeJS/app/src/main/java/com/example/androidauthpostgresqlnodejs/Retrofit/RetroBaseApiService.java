@@ -34,16 +34,21 @@ public interface RetroBaseApiService {
     Call<List<User>> loginUser(@Body User user);
 
     @GET("contacts/{email}")
-    Call<List<Contact_Data>> loadContacts(@Path("email") String email);
+    Call<List<Contact_Data>> loadContactsByUser(@Path("email") String email);
 
     @POST("contacts")
     @FormUrlEncoded
     Call<String> addContact(@Field("phone_number") String phone_number,
                             @Field("contact_name") String contact_name);
+
+//    @GET("contacts/{phone_number}")
+//    Call<List<Contact_Data>> getContact(@Path("phone_number") String contact_name);
+
     @POST("contacts/update")
     @FormUrlEncoded
     Call<String> updateUserContacts(@Field("email") String email,
                                     @Field("phone_number") String phone_number);
+
     @POST("contacts/remove")
     @FormUrlEncoded
     Call<String> deleteContact(@Field("email") String email,
@@ -56,8 +61,6 @@ public interface RetroBaseApiService {
     @Multipart
     @POST("gallery/add")
     Call<Object> uploadPhoto(@Part MultipartBody.Part imageFile);
-//                                   @Part("user_email") RequestBody user_email,
-//                                   @Part("image_id") RequestBody image_id);
 
     @POST("gallery/update")
     @FormUrlEncoded

@@ -42,10 +42,8 @@ public class MainActivity extends AppCompatActivity {
     Button btn_login;
 
     String user_Email;
-//    public static int count = 0;
     public static List<Contact_Data> contactList;
     public static User login_user;
-    final int EXIT_APP = 9;
 
     String[] permission_list = {
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
@@ -98,16 +96,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
-
-
-//    CompositeDisposable compositeDisposable = new CompositeDisposable();
-//    @Override
-//    protected void onStop() {
-//        compositeDisposable.clear();
-//        super.onStop();
-//    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -156,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
                             Toast.makeText(MainActivity.this, "Wrong email and/or password. Please enter valid email and password." , Toast.LENGTH_SHORT).show();
                         }
                         else {
-                            retrofitClient.loadContacts(login_user.getEmail(), new RetroCallback() {
+                            retrofitClient.loadContactsByUser(login_user.getEmail(), new RetroCallback() {
                                 @Override
                                 public void onError(Throwable t) {
                                     Toast.makeText(MainActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
@@ -166,6 +154,7 @@ public class MainActivity extends AppCompatActivity {
                                 public void onSuccess(int code, Object receivedData) {
                                     contactList = (List<Contact_Data>) receivedData;
                                     user_Email = login_user.getEmail();
+                                    Toast.makeText(MainActivity.this, "Welcome!", Toast.LENGTH_SHORT).show();
                                     // received Contact_Data connect with Intent
                                     Intent intent = new Intent(MainActivity.this, TabActivity.class);
 //                                          intent.putExtra("user_Email", edt_login_email.getText().toString());
@@ -254,7 +243,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
 
     private static long back_pressed;
     @Override

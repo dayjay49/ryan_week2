@@ -27,10 +27,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import static android.app.Activity.RESULT_OK;
 
 public class Tab2Fragment extends Fragment {
-    //    private static final int RESULT_OK = -1;
     public RecyclerViewAdapter adapter;
-//    private SwipeController swipeController = null;
-//    public Contact_Data data;
 
     //for recyclerView
 
@@ -50,7 +47,6 @@ public class Tab2Fragment extends Fragment {
     public ArrayList<Contact_Data> contactDataList = new ArrayList<>();
 
     public Tab2Fragment() {
-//        this.user_Email = userEmail;
     }
 
 //    private static final int PERMISSIONS_REQUEST_READ_CONTACTS = 100;
@@ -62,7 +58,6 @@ public class Tab2Fragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         /////////////Get login-ed user email////////////////////
-//        MainActivity activity = (MainActivity) getActivity();
         user_Email = MainActivity.login_user.getEmail();
 
         view = inflater.inflate(R.layout.fragment_tab2, container, false);

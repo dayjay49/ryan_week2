@@ -12,7 +12,6 @@ const pool = new Pool({
 //POST a new user
 const registerUser = (req, res) => {
   const { email, name, password } = req.body
-
   pool.query('INSERT INTO users (email, name, password) VALUES ($1, $2, $3)', 
     [email, name, password], (error, results) => {
     if (error) {
@@ -25,7 +24,6 @@ const registerUser = (req, res) => {
 // POST login user and load all contacts of the user logged in
 const loginUser = (req, res) => {
   const { email, password } = req.body
-
   pool.query('SELECT * FROM users WHERE email = $1 AND password = $2' , [email, password], (error, results) => {
     if (error) {
       throw error
@@ -41,9 +39,8 @@ const loginUser = (req, res) => {
 }
 
 // GET all contacts for a given user after login verified
-const getContactsByUser = (req, res) => {
+const loadContactsByUser = (req, res) => {
   const email = req.params.email
-
   pool.query('SELECT phone_number, contact_name FROM contacts INNER JOIN users_contacts ON contacts.phone_number = users_contacts.contact_number AND users_contacts.user_email = $1',
    [email] , (error, results) => {
     if (error) {
@@ -57,7 +54,6 @@ const getContactsByUser = (req, res) => {
 // POST a contact for a given user
 const addContact = (req, res) => {
   const { phone_number, contact_name } = req.body
-
   pool.query(
     'INSERT INTO contacts (phone_number, contact_name) VALUES ($1, $2) ON CONFLICT (phone_number) DO NOTHING',
     [phone_number, contact_name], (error, results) => {
@@ -68,10 +64,21 @@ const addContact = (req, res) => {
     })
 }
 
+// Get a selected contact for logged user to see if already exists
+// const getContact = (req, res) => {
+//   const phone_number = req.params.phone_number
+//   pool.query('SELECT * FROM contacts WHERE phone_number = $1',
+//    [phone_number], (error, results) => {
+//       if (error) {
+//         throw error
+//       }
+//       res.status(200).json(results.rows)
+//   })
+// }
+
 //POST updated data in an existing user
 const updateUserContacts = (req, res) => {
   const { email, phone_number } = req.body
-
   pool.query('INSERT INTO users_contacts (user_email, contact_number) VALUES ($1, $2) ON CONFLICT ON CONSTRAINT users_contacts_pkey DO NOTHING',
     [email, phone_number],
     (error, results) => {
@@ -87,7 +94,6 @@ const updateUserContacts = (req, res) => {
 // DELETE a contact for a given user
 const deleteContact = (req, res) => {
   const { email, phone_number } = req.body
-
   pool.query('DELETE FROM users_contacts WHERE user_email = $1 AND contact_number = $2', 
     [email, phone_number], (error, results) => {
     if (error) {
@@ -102,7 +108,6 @@ const deleteContact = (req, res) => {
 // LOAD gallery from server
 const loadGallery = (req, res) => {
   const email = req.params.email
-
   pool.query('SELECT path FROM gallery INNER JOIN users_gallery ON gallery.filename = users_gallery.filename AND users_gallery.user_email = $1',
    [email], (error, results) => {
     if (error) {
@@ -116,8 +121,6 @@ const loadGallery = (req, res) => {
 // UPLOAD a photo to the server gallery
 const uploadPhoto = (req, res) => {
   console.log(req.file)
-  // const user_email = req.body.user_email
-  // const image_id = req.body.image_id
 
   const fieldname= req.file.fieldname
   const originalname= req.file.originalname
@@ -142,7 +145,6 @@ const uploadPhoto = (req, res) => {
 // POST updated gallery in an existing user
 const updateUserGallery = (req, res) => {
   const { email, filename } = req.body
-
   pool.query('INSERT INTO users_gallery (user_email, filename) VALUES ($1, $2) ON CONFLICT ON CONSTRAINT users_gallery_pkey DO NOTHING',
    [email, filename], (error, results) => {
     if (error) {
@@ -156,7 +158,6 @@ const updateUserGallery = (req, res) => {
 // DELETE chosen photo from gallery of logged user
 const deletePhoto = (req, res) => {
   const { email, filename } = req.body
-
   pool.query('DELETE FROM users_gallery WHERE user_email = $1 AND filename = $2',
     [email, filename], (error, results) => {
       if (error) {
@@ -170,8 +171,9 @@ const deletePhoto = (req, res) => {
 module.exports = {
 	registerUser,
   loginUser,
-  getContactsByUser,
+  loadContactsByUser,
   addContact,
+  // getContact,
   updateUserContacts,
   deleteContact,
   loadGallery,

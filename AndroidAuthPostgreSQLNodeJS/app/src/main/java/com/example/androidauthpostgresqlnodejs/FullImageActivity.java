@@ -69,9 +69,6 @@ public class FullImageActivity extends AppCompatActivity {
 //        }
 
 
-
-
-
 //        Glide.with(FullImageActivity.this)
 //                .load(photo) // Uri of the picture
 //                .into(GalleryPreviewImg);
@@ -86,8 +83,6 @@ public class FullImageActivity extends AppCompatActivity {
 //        Button closeLogin = (Button) findViewById(R.id.close_button);
 //        closeLogin.setOnClickListener(closebtn_listener) ;
 
-
-
     }
 
     public static Bitmap rotateImage(Bitmap source, float angle) {
@@ -95,7 +90,6 @@ public class FullImageActivity extends AppCompatActivity {
         matrix.postRotate(angle);
         return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
     }
-
 
 //    public Bitmap resizingBitmap(Bitmap oBitmap){
 //        if (oBitmap == null)

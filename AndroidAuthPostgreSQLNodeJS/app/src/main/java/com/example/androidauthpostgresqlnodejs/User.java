@@ -1,7 +1,5 @@
 package com.example.androidauthpostgresqlnodejs;
 
-import com.google.gson.annotations.SerializedName;
-
 public class User {
 
     private String email;

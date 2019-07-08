@@ -16,7 +16,6 @@ public class Splash extends Activity {
 
         setContentView(R.layout.activity_splash);
 
-
         ImageView avo = (ImageView) findViewById(R.id.gif_image);
         //GlideDrawableImageViewTarget gifImage = new GlideDrawableImageViewTarget(rabbit);
         Glide.with(this).load(R.drawable.avocagif1).into(avo);

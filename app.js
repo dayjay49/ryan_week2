@@ -2,6 +2,7 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const multer = require('multer')
 const path = require('path')
+const fs = require('fs')
 const app = express()
 const db = require('./queries')
 const port = 3000
@@ -27,14 +28,28 @@ const upload = multer({
 })
 
 // DB Connect String
-var connection = "postgres://postgres:1234@localhost/week2db";
+// var connection = "postgres://postgres:1234@localhost/week2db";
 
 // Body Parser Middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
-app.use(express.static(__dirname + '/my_uploads/'))
-//'./my_uploads/', express.static('./my_uploads/')
+// app.use('./my_uploads/', express.static('./my_uploads/'))
+//express.static(__dirname + '/my_uploads/')
+
+app.get('/my_uploads/:name', function (req, res) {
+  var filename = req.params.name;
+  fs.exists(__dirname+'/my_uploads/'+filename, function (exists) {
+    if (exists) {
+      fs.readFile(__dirname+'/my_uploads/'+filename, function (err, data) {
+        res.end(data);
+      });
+    } else {
+      res.end('file does not exists');
+    }
+  })
+});
+
 
 app.get('/', function(req, res) {
 	console.log('TEST');
@@ -43,14 +58,19 @@ app.get('/', function(req, res) {
 
 app.post('/register', db.registerUser)
 app.post('/login', db.loginUser)
-app.get('/contacts/:email', db.getContactsByUser)
+app.get('/contacts/:email', db.loadContactsByUser)
+
 app.post('/contacts', db.addContact)
+// app.get('contacts/:phone_number', db.getContact)
 app.post('/contacts/update', db.updateUserContacts)
+
 app.post('/contacts/remove', db.deleteContact)
 
 app.get('/gallery/:email', db.loadGallery)
+
 app.post('/gallery/add', upload.single('imageFile'), db.uploadPhoto)
 app.post('/gallery/update', db.updateUserGallery)
+
 app.post('/gallery/remove', db.deletePhoto)
 
 // Server
