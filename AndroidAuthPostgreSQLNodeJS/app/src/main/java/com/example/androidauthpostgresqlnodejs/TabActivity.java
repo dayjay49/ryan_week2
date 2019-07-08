@@ -26,13 +26,16 @@ import java.util.List;
 
 public class TabActivity extends AppCompatActivity {
 
+    public static List<Photo> serverPathList;
+
     String[] permission_list = {
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
-            Manifest.permission.READ_CONTACTS
-//            Manifest.permission.INTERNET
+            Manifest.permission.READ_CONTACTS,
+            Manifest.permission.INTERNET
     };
 
     String user_Email = "";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +70,7 @@ public class TabActivity extends AppCompatActivity {
             @Override
             public void onSuccess(int code, Object receivedData) {
 
-                List<Photo> serverPathList = (List<Photo>) receivedData;
+                serverPathList = (List<Photo>) receivedData;
 
 
             }

@@ -19,56 +19,63 @@ import java.io.File;
 
 public class FullImageActivity extends AppCompatActivity {
 
+    private String baseURL = "http://143.248.38.250:3000/";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.full_image_view);
 
         Intent i = getIntent();
+        ImageView GalleryPreviewImg = (ImageView) findViewById(R.id.full_image_view);
 
         String path = (String) i.getStringExtra("path");
-        Bitmap bitmap = BitmapFactory.decodeFile(path);
-        Bitmap rotatedBitmap = null;
-        if (bitmap != null) {
-            try {
-                ExifInterface ei = new ExifInterface(path);
-                int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION,
-                        ExifInterface.ORIENTATION_UNDEFINED);
+        Glide.with(FullImageActivity.this)
+                .load(baseURL+path)// Uri of the picture
+                .into(GalleryPreviewImg);
 
-                rotatedBitmap = null;
-                switch (orientation) {
+//        Bitmap bitmap = BitmapFactory.decodeFile(path);
+//        Bitmap rotatedBitmap = null;
+//        if (bitmap != null) {
+//            try {
+//                ExifInterface ei = new ExifInterface(path);
+//                int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION,
+//                        ExifInterface.ORIENTATION_UNDEFINED);
+//
+//                rotatedBitmap = null;
+//                switch (orientation) {
+//
+//                    case ExifInterface.ORIENTATION_ROTATE_90:
+//                        rotatedBitmap = rotateImage(bitmap, 90);
+//                        break;
+//
+//                    case ExifInterface.ORIENTATION_ROTATE_180:
+//                        rotatedBitmap = rotateImage(bitmap, 180);
+//                        break;
+//
+//                    case ExifInterface.ORIENTATION_ROTATE_270:
+//                        rotatedBitmap = rotateImage(bitmap, 270);
+//                        break;
+//
+//                    case ExifInterface.ORIENTATION_NORMAL:
+//                    default:
+//                        rotatedBitmap = bitmap;
+//                        break;
+//                }
+//            } catch (Exception e) {
+//
+//            }
+//
+//        }
 
-                    case ExifInterface.ORIENTATION_ROTATE_90:
-                        rotatedBitmap = rotateImage(bitmap, 90);
-                        break;
-
-                    case ExifInterface.ORIENTATION_ROTATE_180:
-                        rotatedBitmap = rotateImage(bitmap, 180);
-                        break;
-
-                    case ExifInterface.ORIENTATION_ROTATE_270:
-                        rotatedBitmap = rotateImage(bitmap, 270);
-                        break;
-
-                    case ExifInterface.ORIENTATION_NORMAL:
-                    default:
-                        rotatedBitmap = bitmap;
-                        break;
-                }
-            } catch (Exception e) {
-
-            }
-
-        }
 
 
 
 
-        ImageView GalleryPreviewImg = (ImageView) findViewById(R.id.full_image_view);
 //        Glide.with(FullImageActivity.this)
 //                .load(photo) // Uri of the picture
 //                .into(GalleryPreviewImg);
-        GalleryPreviewImg.setImageBitmap(rotatedBitmap);
+//        GalleryPreviewImg.setImageBitmap(rotatedBitmap);
 
 //        View.OnClickListener closebtn_listener = new View.OnClickListener(){
 //            @Override

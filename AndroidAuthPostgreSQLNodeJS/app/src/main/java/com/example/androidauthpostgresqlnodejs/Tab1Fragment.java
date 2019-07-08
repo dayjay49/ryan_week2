@@ -39,6 +39,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.List;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -52,20 +53,22 @@ public class Tab1Fragment extends Fragment {
     public View view;
     public ArrayList<Bitmap> Gallery = new ArrayList<>();
     public ArrayList<String> path_Gallery = new ArrayList<>();
-    public ArrayList<Photo> photo_Gallery = new ArrayList<>();
+//    public ArrayList<Photo> photo_Gallery = new ArrayList<>();
     public Uri mImageUri;
     public String user_Email;
+    public List<Photo> serverPathList;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         user_Email = MainActivity.login_user.getEmail();
+        serverPathList = TabActivity.serverPathList;
 
         super.onCreate(savedInstanceState);
 
         view = inflater.inflate(R.layout.fragment_tab1,container,false);
 
         RecyclerView recyclerViewtab2 = view.findViewById(R.id.recycler_view_tab2);
-        final RecyclerViewAdapterTab2 adapterTab2 = new RecyclerViewAdapterTab2(getActivity(), photo_Gallery);
+        final RecyclerViewAdapterTab2 adapterTab2 = new RecyclerViewAdapterTab2(getActivity(), serverPathList);
         recyclerViewtab2.setAdapter(adapterTab2);
         recyclerViewtab2.setLayoutManager(new GridLayoutManager(getActivity(), 3));
 
@@ -86,13 +89,16 @@ public class Tab1Fragment extends Fragment {
             @Override
             public void onItemClick(View v, int position, int request_code) {
 
+
 //                final Bitmap photo_to_delete = Gallery.get(position);
 //                Gallery.remove(position);
 
                 //////////////////////////////////////////////////////////////
                 final RetrofitClient retrofitClient;
                 retrofitClient = RetrofitClient.getInstance(getContext()).createBaseApi();
-                final String file_to_delete = serverPathList.get(position).getPath().replace("my_uploads","");
+                final String file_to_delete = serverPathList.get(position).getPath().replace("my_uploads\\","");
+
+                serverPathList.remove(position);
 
                 retrofitClient.deletePhoto(user_Email, file_to_delete, new RetroCallback() {
                     @Override
@@ -102,6 +108,8 @@ public class Tab1Fragment extends Fragment {
 
                     @Override
                     public void onSuccess(int code, Object receivedData) {
+                        Toast.makeText(getActivity(), "Chosen image deleted...", Toast.LENGTH_SHORT).show();
+                        initializeRecyclerView();
 
                     }
 
@@ -111,7 +119,7 @@ public class Tab1Fragment extends Fragment {
                     }
                 });
                 //////////////////////////////////////////////////////////////
-                initializeRecyclerView(Gallery);
+
 
             }
         });
@@ -127,16 +135,17 @@ public class Tab1Fragment extends Fragment {
                 case TAKE_PICTURE:
                     if (resultCode == RESULT_OK) {
                         String path = getRealPathFromURI(getActivity(), mImageUri);
-                        path_Gallery.add(path);
-                        final Photo new_Photo = new Photo(path);
-                        photo_Gallery.add(new_Photo);
+//                        path_Gallery.add(path);
+//                        serverPathList.add(new Photo(path));
+//                        final Photo new_Photo = new Photo(path);
+//                        photo_Gallery.add(new_Photo);
 //                        Bitmap new_Photo = BitmapFactory.decodeFile(path);
 //                        Gallery.add(new_Photo);
 //                        initializeRecyclerView(Gallery);
 
                         File file = new File(path);
-                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), Uri.fromFile(file));
-                        Bitmap rotatedBitmap = null;
+//                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), Uri.fromFile(file));
+//                        Bitmap rotatedBitmap = null;
 
                         RequestBody filePart = RequestBody.create(MediaType.parse("image/*"), file);
 //                        RequestBody current_user_email = RequestBody.create(MultipartBody.FORM, user_Email);
@@ -144,37 +153,37 @@ public class Tab1Fragment extends Fragment {
 
                         MultipartBody.Part part = MultipartBody.Part.createFormData("imageFile", file.getName(), filePart);
 
-                        if (bitmap != null) {
-                            try {
-                                ExifInterface ei = new ExifInterface(path);
-                                int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION,
-                                        ExifInterface.ORIENTATION_UNDEFINED);
-
-                                rotatedBitmap = null;
-                                switch (orientation) {
-
-                                    case ExifInterface.ORIENTATION_ROTATE_90:
-                                        rotatedBitmap = rotateImage(bitmap, 90);
-                                        break;
-
-                                    case ExifInterface.ORIENTATION_ROTATE_180:
-                                        rotatedBitmap = rotateImage(bitmap, 180);
-                                        break;
-
-                                    case ExifInterface.ORIENTATION_ROTATE_270:
-                                        rotatedBitmap = rotateImage(bitmap, 270);
-                                        break;
-
-                                    case ExifInterface.ORIENTATION_NORMAL:
-                                    default:
-                                        rotatedBitmap = bitmap;
-                                        break;
-                                }
-                            } catch (Exception e) {
-
-                            }
-                            Gallery.add(rotatedBitmap);
-                        }
+//                        if (bitmap != null) {
+//                            try {
+//                                ExifInterface ei = new ExifInterface(path);
+//                                int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION,
+//                                        ExifInterface.ORIENTATION_UNDEFINED);
+//
+//                                rotatedBitmap = null;
+//                                switch (orientation) {
+//
+//                                    case ExifInterface.ORIENTATION_ROTATE_90:
+//                                        rotatedBitmap = rotateImage(bitmap, 90);
+//                                        break;
+//
+//                                    case ExifInterface.ORIENTATION_ROTATE_180:
+//                                        rotatedBitmap = rotateImage(bitmap, 180);
+//                                        break;
+//
+//                                    case ExifInterface.ORIENTATION_ROTATE_270:
+//                                        rotatedBitmap = rotateImage(bitmap, 270);
+//                                        break;
+//
+//                                    case ExifInterface.ORIENTATION_NORMAL:
+//                                    default:
+//                                        rotatedBitmap = bitmap;
+//                                        break;
+//                                }
+//                            } catch (Exception e) {
+//
+//                            }
+//                            Gallery.add(rotatedBitmap);
+//                        }
 
                         //Initialize Service
                         final RetrofitClient retrofitClient;
@@ -200,7 +209,7 @@ public class Tab1Fragment extends Fragment {
                                     @Override
                                     public void onSuccess(int code, Object receivedData) {
                                         Toast.makeText(getActivity(), "Uploaded photo taken.", Toast.LENGTH_SHORT).show();
-                                        initializeRecyclerView(Gallery);
+                                        initializeRecyclerView();
                                     }
 
                                     @Override
@@ -255,9 +264,9 @@ public class Tab1Fragment extends Fragment {
 
 
 
-    public void initializeRecyclerView(ArrayList<Bitmap> Gallery) {
+    public void initializeRecyclerView() {
         RecyclerView recyclerViewtab2 = view.findViewById(R.id.recycler_view_tab2);
-        RecyclerViewAdapterTab2 adapterTab2 = new RecyclerViewAdapterTab2(getActivity(), photo_Gallery);
+        RecyclerViewAdapterTab2 adapterTab2 = new RecyclerViewAdapterTab2(getActivity(), serverPathList);
         recyclerViewtab2.setAdapter(adapterTab2);
         recyclerViewtab2.setLayoutManager(new GridLayoutManager(getActivity(), 3));
     }

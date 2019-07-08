@@ -16,17 +16,21 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+
 import java.util.ArrayList;
+import java.util.List;
 
 public class RecyclerViewAdapterTab2 extends RecyclerView.Adapter<RecyclerViewAdapterTab2.TabTwoViewHolder> {
 
+    private String baseURL = "http://143.248.38.250:3000/";
     private static final String TAG = "RecyclerViewAdapterTab2";
 
     private Context mContext;
-    private ArrayList<Photo> mData;
+    private List<Photo> mData;
     private ArrayList<String> mPath;
 
-    public RecyclerViewAdapterTab2(Context mContext,ArrayList<Photo> mData) {
+    public RecyclerViewAdapterTab2(Context mContext, List<Photo> mData) {
         this.mContext = mContext;
         this.mData = mData;
     }
@@ -53,15 +57,19 @@ public class RecyclerViewAdapterTab2 extends RecyclerView.Adapter<RecyclerViewAd
     @Override
     public void onBindViewHolder(final TabTwoViewHolder holder, final int position) {
 //
-        Bitmap bitmap = BitmapFactory.decodeFile(mData.get(position).getmPath());
-        holder.img_thumbnail.setImageBitmap(bitmap);
+//        Bitmap bitmap = BitmapFactory.decodeFile(mData.get(position).getPath());
+//        holder.img_thumbnail.setImageBitmap(bitmap);
+        String path = mData.get(position).getPath();
+        Glide.with(mContext)
+                .load(baseURL+path)
+                .into(holder.img_thumbnail);
 
         holder.cardView.setOnClickListener(new View.OnClickListener() {
 //            @Override
             public void onClick(View view) {
                 Intent intent = new Intent(mContext, FullImageActivity.class);
 
-                intent.putExtra("path", mData.get(position).getmPath());
+                intent.putExtra("path", mData.get(position).getPath());
                 view.getContext().startActivity(intent);
             }
         });
@@ -88,7 +96,11 @@ public class RecyclerViewAdapterTab2 extends RecyclerView.Adapter<RecyclerViewAd
 
     @Override
     public int getItemCount() {
-        return mData.size();
+        if (mData == null) {
+            return 0;
+        } else {
+            return mData.size();
+        }
     }
 
     public static class TabTwoViewHolder extends RecyclerView.ViewHolder {
